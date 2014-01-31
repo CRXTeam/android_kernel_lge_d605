@@ -2622,7 +2622,7 @@ static int do_siocgstamp(struct net *net, struct socket *sock,
 	err = sock_do_ioctl(net, sock, cmd, (unsigned long)&ktv);
 	set_fs(old_fs);
 	if (!err)
-		err = compat_put_timeval(up, &ktv);
+		err = compat_put_timeval(&ktv, up);
 
 	return err;
 }
@@ -2638,7 +2638,7 @@ static int do_siocgstampns(struct net *net, struct socket *sock,
 	err = sock_do_ioctl(net, sock, cmd, (unsigned long)&kts);
 	set_fs(old_fs);
 	if (!err)
-		err = compat_put_timespec(up, &kts);
+		err = compat_put_timespec(&kts, up);
 
 	return err;
 }
@@ -2675,6 +2675,7 @@ static int dev_ifconf(struct net *net, struct compat_ifconf __user *uifc32)
 	if (copy_from_user(&ifc32, uifc32, sizeof(struct compat_ifconf)))
 		return -EFAULT;
 
+	memset(&ifc, 0, sizeof(ifc));
 	if (ifc32.ifcbuf == 0) {
 		ifc32.ifc_len = 0;
 		ifc.ifc_len = 0;

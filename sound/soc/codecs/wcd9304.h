@@ -264,11 +264,5 @@ extern void sitar_register_mclk_call_back(struct snd_soc_codec *codec,
 				 sizeof(cfg_ptr->_alpha[0]))))
 
 #ifdef CONFIG_SWITCH_FSA8008
-/*
-                               
-                                                             
-                                   
-*/
 extern void sitar_codec_micbias2_ctl(int enable);
 #endif
-

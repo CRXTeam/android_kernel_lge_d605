@@ -574,8 +574,7 @@ static struct snd_kcontrol_new msm_voice_controls[] = {
 	SOC_SINGLE_EXT("SGLTE Rx Volume", SND_SOC_NOPM, 0, 5, 0,
 				msm_sglte_volume_get, msm_sglte_volume_put),
 };
-
-//                                                                                 
+                                                                              
 #elif defined(CONFIG_MACH_LGE_FX3_VZW) || defined(CONFIG_MACH_LGE_FX3Q_TMUS) 
 static struct snd_kcontrol_new msm_voice_controls[] = {
 	SOC_SINGLE_EXT("Voice Rx Device Mute", SND_SOC_NOPM, 0, 1, 0,
@@ -607,8 +606,7 @@ static struct snd_kcontrol_new msm_voice_controls[] = {
 				msm_sglte_mute_get, msm_sglte_mute_put),
 	SOC_SINGLE_EXT("SGLTE Rx Volume", SND_SOC_NOPM, 0, 5, 0,
 				msm_sglte_volume_get, msm_sglte_volume_put),
-};
-//                                                                                 
+};                                                                          
 
 #else
 static struct snd_kcontrol_new msm_voice_controls[] = {
@@ -643,7 +641,6 @@ static struct snd_kcontrol_new msm_voice_controls[] = {
 				msm_sglte_volume_get, msm_sglte_volume_put),
 };
 #endif
-
 
 static struct snd_pcm_ops msm_pcm_ops = {
 	.open           = msm_pcm_open,

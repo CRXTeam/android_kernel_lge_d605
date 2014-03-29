@@ -89,11 +89,7 @@ static int in_cont_index;
 static int out_cold_index;
 static char *out_buffer;
 static char *in_buffer;
-
-//                                                        
 struct audio_buffer *lpa_buf=NULL;
-//                                                        
-
 static int audio_output_latency_dbgfs_open(struct inode *inode,
 							struct file *file)
 {
@@ -291,7 +287,6 @@ int q6asm_audio_client_buf_free_contiguous(unsigned int dir,
 	int cnt = 0;
 	int rc = 0;
 	pr_debug("%s: Session id %d\n", __func__, ac->session);
-//                                                        
     if( ac->port[dir].buf == lpa_buf)
     {
         port = &ac->port[dir];
@@ -299,7 +294,6 @@ int q6asm_audio_client_buf_free_contiguous(unsigned int dir,
         port->buf = NULL;
     }
     else {
-//                                                        
         mutex_lock(&ac->cmd_lock);
         port = &ac->port[dir];
         if (!port->buf) {
@@ -634,7 +628,6 @@ fail:
 	return -EINVAL;
 }
 
-//                                                        
 static void lpa_buffer_alloc(void)
 {
 	int rc = 0;
@@ -649,7 +642,6 @@ static void lpa_buffer_alloc(void)
         pr_err("%s: ION create client for AUDIO failed\n", __func__);
         goto fail;
     }
-
 
     lpa_buf[0].handle = ion_alloc(lpa_buf[0].client, 128 * 1024 * 8, SZ_4K,(0x1 << ION_AUDIO_HEAP_ID));
     if (IS_ERR_OR_NULL((void *) lpa_buf[0].handle)) {
@@ -676,24 +668,13 @@ static void lpa_buffer_alloc(void)
 fail:
 
     printk("LPA Buffer Alloc Failed, Just do Normal Mode\n");
-	//                                                                                 
-#if defined( CONFIG_MACH_LGE_F6_TMUS)|| defined(CONFIG_MACH_LGE_F6_VDF) || defined(CONFIG_MACH_LGE_F6_ORG)|| defined(CONFIG_MACH_LGE_F6_OPEN) || defined(CONFIG_MACH_LGE_F6_TMO)
-	if(lpa_buf != NULL){
-		ion_unmap_kernel(lpa_buf[0].client, lpa_buf[0].handle);
-		ion_free(lpa_buf[0].client, lpa_buf[0].handle);
-		ion_client_destroy(lpa_buf[0].client);
-	}
-#else
-	//                                                                              
 	ion_unmap_kernel(lpa_buf[0].client, lpa_buf[0].handle);
 	ion_free(lpa_buf[0].client, lpa_buf[0].handle);
 	ion_client_destroy(lpa_buf[0].client);
-#endif
     kfree(lpa_buf);
 	lpa_buf=NULL;
     return;
 }
-//                                                        
 
 int q6asm_audio_client_buf_alloc_contiguous(unsigned int dir,
 			struct audio_client *ac,
@@ -722,7 +703,7 @@ int q6asm_audio_client_buf_alloc_contiguous(unsigned int dir,
 		pr_debug("%s: buffer already allocated\n", __func__);
 		return 0;
 	}
-//                                                        
+
     if( dir == IN && bufsz == 128 * 1024 && lpa_buf != NULL )
     {
         buf = lpa_buf;
@@ -732,7 +713,6 @@ int q6asm_audio_client_buf_alloc_contiguous(unsigned int dir,
     }
     else
     {
-//                                                        
         mutex_lock(&ac->cmd_lock);
         buf = kzalloc(((sizeof(struct audio_buffer))*bufcnt),
                 GFP_KERNEL);
@@ -961,17 +941,12 @@ static int32_t q6asm_callback(struct apr_client_data *data, void *priv)
 		case ASM_STREAM_CMD_SET_ENCDEC_PARAM:
 		case ASM_STREAM_CMD_OPEN_WRITE_COMPRESSED:
 		case ASM_STREAM_CMD_OPEN_READ_COMPRESSED:
-/*                                      
-                                                             
-                                 
-*/				
 //			if (atomic_read(&ac->cmd_state) && wakeup_flag) {
 			if (payload[0] == ASM_STREAM_CMD_CLOSE) {
 				atomic_set(&ac->cmd_close_state, 0);
 				wake_up(&ac->cmd_wait);
 			} else if (atomic_read(&ac->cmd_state) &&
 				wakeup_flag) {
-/*              */
 				atomic_set(&ac->cmd_state, 0);
 				if (payload[1] == ADSP_EUNSUPPORTED) {
 					pr_debug("paload[1]:%d unsupported",
@@ -3096,7 +3071,7 @@ fail_cmd:
 	kfree(vol_cmd);
 	return rc;
 }
-//                                                 
+
 int q6asm_set_volume_nosync(struct audio_client *ac, int volume)
 {
 	void *vol_cmd = NULL;
@@ -3142,7 +3117,7 @@ fail_cmd:
 	kfree(vol_cmd);
 	return rc;
 }
-//                                                 
+
 int q6asm_set_volume(struct audio_client *ac, int volume)
 {
 	void *vol_cmd = NULL;
@@ -3842,14 +3817,8 @@ int q6asm_cmd(struct audio_client *ac, int cmd)
 	case CMD_CLOSE:
 		pr_debug("%s:CMD_CLOSE\n", __func__);
 		hdr.opcode = ASM_STREAM_CMD_CLOSE;
-/*                                      
-                                                             
-                                 
-*/
-		//state = &ac->cmd_state;
 		atomic_set(&ac->cmd_close_state, 1);
 		state = &ac->cmd_close_state;
-/*              */
 		break;
 	default:
 		pr_err("Invalid format[%d]\n", cmd);
@@ -4014,10 +3983,6 @@ static int __init q6asm_init(void)
 #ifdef CONFIG_DEBUG_FS
 	out_buffer = kmalloc(OUT_BUFFER_SIZE, GFP_KERNEL);
 #ifdef CONFIG_LGE_AUDIO
-	/*
-                                                              
-                               
-  */
 	out_dentry = debugfs_create_file("audio_out_latency_measurement_node",\
 				S_IFREG | S_IRUGO | S_IWUSR | S_IWGRP,\
 				NULL, NULL, &audio_output_latency_debug_fops);
@@ -4030,10 +3995,6 @@ static int __init q6asm_init(void)
 		pr_err("debugfs_create_file failed\n");
 	in_buffer = kmalloc(IN_BUFFER_SIZE, GFP_KERNEL);
 #ifdef CONFIG_LGE_AUDIO
-	/*
-                                                              
-                               
-  */
 	in_dentry = debugfs_create_file("audio_in_latency_measurement_node",\
 				S_IFREG | S_IRUGO | S_IWUSR | S_IWGRP,\
 				NULL, NULL, &audio_input_latency_debug_fops);
@@ -4045,9 +4006,7 @@ static int __init q6asm_init(void)
 	if (IS_ERR(in_dentry))
 		pr_err("debugfs_create_file failed\n");
 #endif
-//                                                        
     lpa_buffer_alloc();
-//                                                        
 	return 0;
 }
 

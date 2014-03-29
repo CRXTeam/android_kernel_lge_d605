@@ -37,12 +37,9 @@
 #include "msm-pcm-routing.h"
 
 static struct audio_locks the_locks;
-//                                                                                                       
 #if 0
-//                                                         
 static int lpa_set_volume_nosync(unsigned volume);
 static int pause_is_called = 0;
-//                                                         
 #endif
 
 struct snd_msm {
@@ -99,15 +96,11 @@ static void event_handler(uint32_t opcode,
 	switch (opcode) {
 	case ASM_DATA_EVENT_WRITE_DONE: {
 		uint32_t *ptrmem = (uint32_t *)&param;
-//                                                                                                       
 #if 0
-//                                                         
-            if(pause_is_called > 0)
-            {
+            if(pause_is_called > 0) {
                 lpa_set_volume_nosync(pause_is_called);
                 pause_is_called = 0;
             }
-//                                                         
 #endif
 		pr_debug("ASM_DATA_EVENT_WRITE_DONE\n");
 		pr_debug("Buffer Consumed = 0x%08x\n", *ptrmem);
@@ -291,13 +284,10 @@ static int msm_pcm_trigger(struct snd_pcm_substream *substream, int cmd)
 	case SNDRV_PCM_TRIGGER_RESUME:
 	case SNDRV_PCM_TRIGGER_PAUSE_RELEASE:
 		pr_debug("SNDRV_PCM_TRIGGER_START\n");
-		//                                                                                                       
-		#if 0
-        //                                                 
+#if 0
         pause_is_called = lpa_audio.volume;
         lpa_set_volume_nosync(0);
-        //                                                 
-		#endif
+#endif
 		q6asm_run_nowait(prtd->audio_client, 0, 0, 0);
 		atomic_set(&prtd->start, 1);
 		atomic_set(&prtd->stop, 0);
@@ -413,9 +403,8 @@ static int msm_pcm_open(struct snd_pcm_substream *substream)
 
 	return 0;
 }
-//                                                                                                       
+
 #if 0
-//                                                         
 static int lpa_set_volume_nosync(unsigned volume)
 {
 	int rc = 0;
@@ -429,17 +418,14 @@ static int lpa_set_volume_nosync(unsigned volume)
 	lpa_audio.volume = volume;
 	return rc;
 }
-//                                                         
 #endif
 int lpa_set_volume(unsigned volume)
 {
 	int rc = 0;
-//                                                                                                       
+
 #if 0
-//                                                                        
     if(pause_is_called > 0 )
         pause_is_called = volume; 
-//                                                                        
 #endif
 
 	if (lpa_audio.prtd && lpa_audio.prtd->audio_client) {
@@ -627,16 +613,12 @@ static int msm_pcm_ioctl(struct snd_pcm_substream *substream,
 		if (copy_to_user((void *) arg, &tstamp,
 			sizeof(struct snd_compr_tstamp)))
 			return -EFAULT;
-
-//                                                                                                       
 #if 0
-//                                                 
         if(pause_is_called > 0)
         {
             lpa_set_volume_nosync(pause_is_called);
             pause_is_called = 0;
         }
-//                                                 
 #endif
         return 0;
 	}

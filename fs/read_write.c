@@ -21,15 +21,7 @@
 #include <asm/unistd.h>
 
 #ifndef CONFIG_MACH_LGE_L9II_COMMON
-/*             
-  
-                                        
-                                             
-  
-                                  
- */
 #include "sreadahead_prof.h"
-/*             */
 #endif
 
 const struct file_operations generic_ro_fops = {
@@ -388,15 +380,7 @@ ssize_t vfs_read(struct file *file, char __user *buf, size_t count, loff_t *pos)
 	if (ret >= 0) {
 
 #ifndef CONFIG_MACH_LGE_L9II_COMMON
-/*             
-  
-                                        
-                                             
-  
-                                  
- */
 	sreadahead_prof( file, count, *pos);
-/*              */
 #endif
 
 		count = ret;
@@ -758,15 +742,7 @@ static ssize_t do_readv_writev(int type, struct file *file,
 		goto out;
 
 #ifndef CONFIG_MACH_LGE_L9II_COMMON
-/*             
-  
-                                        
-                                             
-  
-                                  
- */
 	if( type == READ) sreadahead_prof( file, tot_len, *pos);
-/*              */
 #endif
 
 	fnv = NULL;

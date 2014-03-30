@@ -153,8 +153,6 @@ obj-$(CONFIG_FB_MSM_MIPI_HITACHI_R69328A_VIDEO_HD_PT) += mipi_hitachi_r69328_vid
 obj-$(CONFIG_FB_MSM_MIPI_TX13D107VM_NT35521_VIDEO_HD_PT) += mipi_tx13d107vm_nt35521_video_hd_pt.o
 # LGE_CHANGE_E [koh.euije@lge.com] LCD for L9II REV
 
-
-#
 obj-$(CONFIG_FB_MSM_MIPI_TOSHIBA_VIDEO_WVGA_PT) += mipi_toshiba_video_wvga_pt.o
 obj-$(CONFIG_FB_MSM_MIPI_TOSHIBA_VIDEO_WSVGA_PT) += mipi_toshiba_video_wsvga_pt.o
 obj-$(CONFIG_FB_MSM_MIPI_TOSHIBA_VIDEO_WUXGA) += mipi_toshiba_video_wuxga.o

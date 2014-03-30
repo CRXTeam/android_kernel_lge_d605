@@ -39,11 +39,6 @@ static void memset16(void *_ptr, unsigned short val, unsigned count)
 #if defined(CONFIG_MACH_LGE) && \
 	(defined(CONFIG_FB_MSM_DEFAULT_DEPTH_ARGB8888) ||\
 	 defined(CONFIG_FB_MSM_DEFAULT_DEPTH_RGBA8888))
-/*           
-                                                       
-                             
-                                  
-*/
 static void memset32(void *_ptr, unsigned short val, unsigned count)
 {
     char *ptr = _ptr;
@@ -127,10 +122,6 @@ err_logo_close_file:
 #if defined(CONFIG_MACH_LGE) && \
 	(defined(CONFIG_FB_MSM_DEFAULT_DEPTH_ARGB8888) ||\
 	 defined(CONFIG_FB_MSM_DEFAULT_DEPTH_RGBA8888))
-/*           
-                                              
-                                  
-*/
 int load_888rle_image(char *filename)
 {
 	struct fb_info *info;

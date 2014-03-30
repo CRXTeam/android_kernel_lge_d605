@@ -209,14 +209,8 @@ repeat:
 		if (!new_transaction)
 			goto alloc_transaction;
 		write_lock(&journal->j_state_lock);
-//                                                                                          
-#if 1		
-				if (!journal->j_running_transaction && !journal->j_barrier_count) {
-#else
-				if (!journal->j_running_transaction) {
-#endif
-//                                                                                        
-		jbd2_get_transaction(journal, new_transaction);
+		if (!journal->j_running_transaction && !journal->j_barrier_count) {
+			jbd2_get_transaction(journal, new_transaction);
 			new_transaction = NULL;
 		}
 		write_unlock(&journal->j_state_lock);

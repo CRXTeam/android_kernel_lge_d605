@@ -973,32 +973,6 @@ void mipi_dsi_controller_cfg(int enable)
 
 	uint32 dsi_ctrl;
 	uint32 status;
-#if defined(CONFIG_MACH_LGE) && defined(CONFIG_FB_MSM_MIPI_HIMAX_H8379A_VIDEO_WVGA_PT)
-	u32 sleep_us = 1000;
-	u32 timeout_us = 16000;
-
-	/* Check for CMD_MODE_DMA_BUSY */
-	if (readl_poll_timeout((MIPI_DSI_BASE + 0x0004),
-			   status,
-			   ((status & 0x02) == 0),
-			       sleep_us, timeout_us))
-		pr_info("%s: DSI status=%x failed\n", __func__, status);
-
-	/* Check for x_HS_FIFO_EMPTY */
-	if (readl_poll_timeout((MIPI_DSI_BASE + 0x0008),
-			   status,
-			   ((status & 0x11111000) == 0x11111000),
-			       sleep_us, timeout_us))
-		pr_info("%s: FIFO status=%x failed\n", __func__, status);
-
-	/* Check for VIDEO_MODE_ENGINE_BUSY */
-	if (readl_poll_timeout((MIPI_DSI_BASE + 0x0004),
-			   status,
-			   ((status & 0x08) == 0),
-			       sleep_us, timeout_us))
-		pr_info("%s: DSI status=%x failed\n", __func__, status);
-#else
-
 	int cnt;
 
 	cnt = 16;
@@ -1023,7 +997,6 @@ void mipi_dsi_controller_cfg(int enable)
 
 	if (cnt == 0)
 		pr_info("%s: FIFO status=%x failed\n", __func__, status);
-#endif
 
 	dsi_ctrl = MIPI_INP(MIPI_DSI_BASE + 0x0000);
 	if (enable)
@@ -1160,20 +1133,12 @@ int mipi_dsi_cmd_reg_tx(uint32 data)
 
 	return 4;
 }
-#if defined(CONFIG_MACH_LGE) && defined(CONFIG_FB_MSM_MIPI_HIMAX_H8379A_VIDEO_WVGA_PT)
-static int mipi_dsi_cmd_dma_tx(struct dsi_buf *tp);
-static int mipi_dsi_cmd_dma_rx(struct dsi_buf *rp, int rlen);
-#endif
+
 /*
  * mipi_dsi_cmds_tx:
  * thread context only
  */
-#if defined(CONFIG_MACH_LGE) && defined(CONFIG_FB_MSM_MIPI_HIMAX_H8379A_VIDEO_WVGA_PT)
-static int mipi_dsi_cmds_tx(struct dsi_buf *tp,
-						struct dsi_cmd_desc *cmds, int cnt)
-#else
 int mipi_dsi_cmds_tx(struct dsi_buf *tp, struct dsi_cmd_desc *cmds, int cnt)
-#endif
 {
 	struct dsi_cmd_desc *cm;
 	uint32 dsi_ctrl, ctrl;
@@ -1200,11 +1165,7 @@ int mipi_dsi_cmds_tx(struct dsi_buf *tp, struct dsi_cmd_desc *cmds, int cnt)
 		mipi_dsi_cmd_dma_tx(tp);
 		if (cm->wait)
 #ifdef CONFIG_MACH_LGE
-#ifdef CONFIG_FB_MSM_MIPI_HIMAX_H8379A_VIDEO_WVGA_PT
-	msleep(cm->wait);
-#else
 	mdelay(cm->wait);
-#endif
 #else
 	msleep(cm->wait);
 #endif
@@ -1235,7 +1196,6 @@ static struct dsi_cmd_desc pkt_size_cmd[] = {
  * any return data more than MIPI_DSI_LEN need to be break down
  * to multiple transactions.
  */
-#ifndef CONFIG_FB_MSM_MIPI_HIMAX_H8379A_VIDEO_WVGA_PT
 int mipi_dsi_cmds_rx(struct msm_fb_data_type *mfd,
 			struct dsi_buf *tp, struct dsi_buf *rp,
 			struct dsi_cmd_desc *cmds, int rlen)
@@ -1348,15 +1308,9 @@ int mipi_dsi_cmds_rx(struct msm_fb_data_type *mfd,
 
 	return rp->len;
 }
-#endif
 
-#if defined(CONFIG_MACH_LGE) && defined(CONFIG_FB_MSM_MIPI_HIMAX_H8379A_VIDEO_WVGA_PT)
-static int mipi_dsi_cmds_rx(struct dsi_buf *tp, struct dsi_buf *rp,
-						struct dcs_cmd_req *req, int rlen)
-#else
 int mipi_dsi_cmds_rx_new(struct dsi_buf *tp, struct dsi_buf *rp,
 			struct dcs_cmd_req *req, int rlen)
-#endif
 {
 	struct dsi_cmd_desc *cmds;
 	int cnt, len, diff, pkt_size;
@@ -1411,9 +1365,7 @@ int mipi_dsi_cmds_rx_new(struct dsi_buf *tp, struct dsi_buf *rp,
 	/* transmit read comamnd to client */
 	mipi_dsi_cmd_dma_tx(tp);
 
-#ifndef CONFIG_FB_MSM_MIPI_HIMAX_H8379A_VIDEO_WVGA_PT
 	mipi_dsi_disable_irq(DSI_CMD_TERM);
-#endif
 	/*
 	 * once cmd_dma_done interrupt received,
 	 * return data from client is ready and stored
@@ -1467,11 +1419,7 @@ int mipi_dsi_cmds_rx_new(struct dsi_buf *tp, struct dsi_buf *rp,
 	return rp->len;
 }
 
-#if defined(CONFIG_MACH_LGE) && defined(CONFIG_FB_MSM_MIPI_HIMAX_H8379A_VIDEO_WVGA_PT)
-static int mipi_dsi_cmd_dma_tx(struct dsi_buf *tp)
-#else
 int mipi_dsi_cmd_dma_tx(struct dsi_buf *tp)
-#endif
 {
 
 	unsigned long flags;
@@ -1523,11 +1471,7 @@ int mipi_dsi_cmd_dma_tx(struct dsi_buf *tp)
 	return tp->len;
 }
 
-#if defined(CONFIG_MACH_LGE) && defined(CONFIG_FB_MSM_MIPI_HIMAX_H8379A_VIDEO_WVGA_PT)
-static int mipi_dsi_cmd_dma_rx(struct dsi_buf *rp, int rlen)
-#else
 int mipi_dsi_cmd_dma_rx(struct dsi_buf *rp, int rlen)
-#endif
 {
 	uint32 *lp, data;
 	int i, off, cnt;
@@ -1632,25 +1576,12 @@ void mipi_dsi_cmdlist_rx(struct dcs_cmd_req *req)
 	struct dsi_buf *rp;
 
 	mipi_dsi_buf_init(&dsi_tx_buf);
-#ifndef CONFIG_FB_MSM_MIPI_HIMAX_H8379A_VIDEO_WVGA_PT
 	mipi_dsi_buf_init(&dsi_rx_buf);
-#endif
 
 	tp = &dsi_tx_buf;
-#ifndef CONFIG_FB_MSM_MIPI_HIMAX_H8379A_VIDEO_WVGA_PT
 	rp = &dsi_rx_buf;
-#endif
 
-#if defined(CONFIG_MACH_LGE) && defined(CONFIG_FB_MSM_MIPI_HIMAX_H8379A_VIDEO_WVGA_PT)
-	if (req->rbuf)
-		rp = req->rbuf;
-	else
-		rp = &dsi_rx_buf;
-	mipi_dsi_buf_init(rp);
-	len = mipi_dsi_cmds_rx(tp, rp, req, req->rlen);
-#else
 	len = mipi_dsi_cmds_rx_new(tp, rp, req, req->rlen);
-#endif
 	dp = (u32 *)rp->data;
 
 	if (req->cb)

@@ -39,14 +39,13 @@ u32 dsi_irq;
 u32 esc_byte_ratio;
 
 static boolean tlmm_settings = FALSE;
-/*            */
+
 static bool bmipi_off = 0;
 static int mipi_dsi_probe(struct platform_device *pdev);
 static int mipi_dsi_remove(struct platform_device *pdev);
 
 static int mipi_dsi_off(struct platform_device *pdev);
 static int mipi_dsi_on(struct platform_device *pdev);
-/*            */
 static void mipi_dsi_shutdown(struct platform_device *pdev);
 
 static struct platform_device *pdev_list[MSM_FB_MAX_DEV_LIST];
@@ -58,7 +57,6 @@ static int vsync_gpio = -1;
 static struct platform_driver mipi_dsi_driver = {
 	.probe = mipi_dsi_probe,
 	.remove = mipi_dsi_remove,
-  /*            */
 	.shutdown = mipi_dsi_shutdown,
 	.driver = {
 		   .name = "mipi_dsi",
@@ -67,12 +65,10 @@ static struct platform_driver mipi_dsi_driver = {
 
 struct device dsi_dev;
 
-/*            */
 static void mipi_dsi_shutdown(struct platform_device *pdev)
 {
 
-	if(bmipi_off == 0)
-	{
+	if(bmipi_off == 0) {
 	int ret = 0;
 	struct msm_fb_data_type *mfd;
 	struct msm_panel_info *pinfo;
@@ -148,9 +144,7 @@ static int mipi_dsi_off(struct platform_device *pdev)
 {
 	int ret = 0;
 
-/*            */
-	if(bmipi_off == 0)
-	{
+	if(bmipi_off == 0) {
 	struct msm_fb_data_type *mfd;
 	struct msm_panel_info *pinfo;
 
@@ -218,7 +212,6 @@ static int mipi_dsi_off(struct platform_device *pdev)
 
 	pr_debug("End of %s ....:\n", __func__);
 
-/*            */
 	bmipi_off = 1;
 	}
 	return ret;
@@ -417,7 +410,6 @@ static int mipi_dsi_on(struct platform_device *pdev)
 		up(&mfd->dma->mutex);
 
 	pr_debug("End of %s....:\n", __func__);
-  /*            */
 	bmipi_off = 0;
 
 	return ret;
@@ -678,6 +670,7 @@ static int mipi_dsi_probe(struct platform_device *pdev)
 		goto mipi_dsi_probe_err;
 
 	pdev_list[pdev_list_cnt++] = pdev;
+
 	if (!mfd->cont_splash_done)
 		cont_splash_clk_ctrl(1);
 

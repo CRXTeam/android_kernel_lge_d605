@@ -37,10 +37,6 @@
 
 #include <mach/iommu_domains.h>
 
-#ifdef CONFIG_LGE_HIDDEN_RESET
-#include <mach/board_lge.h>
-#endif
-
 #define DSI_VIDEO_BASE	0xE0000
 
 static int first_pixel_start_x;
@@ -535,10 +531,6 @@ int mdp4_dsi_video_on(struct platform_device *pdev)
 	buf = (uint8 *) fbi->fix.smem_start;
 	buf_offset = calc_fb_offset(mfd, fbi, bpp);
 
-#if 0 //                            
-	if (on_hidden_reset)
-		buf = (uint8 *)lge_get_hreset_fb_phys_addr();
-#endif
 	if (vctrl->base_pipe == NULL) {
 		ptype = mdp4_overlay_format2type(mfd->fb_imgType);
 		if (ptype < 0)
@@ -565,11 +557,6 @@ int mdp4_dsi_video_on(struct platform_device *pdev)
 	} else {
 		pipe = vctrl->base_pipe;
 	}
-
-/*                                                                */
-#if defined(CONFIG_MACH_LGE_FX3_VZW) || defined(CONFIG_MACH_LGE_FX3Q_TMUS)
-	pipe->mfd = mfd;
-#endif
 
 	if (!(mfd->cont_splash_done)) {
 		mfd->cont_splash_done = 1;
@@ -714,6 +701,7 @@ int mdp4_dsi_video_off(struct platform_device *pdev)
 	atomic_set(&vctrl->vsync_resume, 0);
 
 	msleep(20);	/* >= 17 ms */
+
 	complete_all(&vctrl->vsync_comp);
 
 	if (pipe->ov_blt_addr) {
@@ -1114,10 +1102,6 @@ void mdp4_dsi_video_overlay(struct msm_fb_data_type *mfd)
 		buf = (uint8 *) fbi->fix.smem_start;
 		buf_offset = calc_fb_offset(mfd, fbi, bpp);
 
-#if 0 //                            
-	if (on_hidden_reset)
-		buf = (uint8 *)lge_get_hreset_fb_phys_addr();
-#endif
 		if (mfd->display_iova)
 			pipe->srcp0_addr = mfd->display_iova + buf_offset;
 		else

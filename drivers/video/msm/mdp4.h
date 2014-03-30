@@ -404,13 +404,6 @@ struct mdp4_overlay_pipe {
 	struct completion comp;
 	struct completion dmas_comp;
 	struct mdp4_iommu_pipe_info iommu;
-
-/*                                                                */
-#if defined(CONFIG_MACH_LGE_FX3_VZW) || defined(CONFIG_MACH_LGE_FX3Q_TMUS) 
-	uint32 ext_flag;
-	struct msm_fb_data_type *mfd;
-#endif
-/*                                                              */
 };
 
 struct mdp4_statistic {

@@ -51,10 +51,6 @@
 #include <mach/board_lge.h>
 #include "../../char/diag/mtsk_tty.h"
 
-/*           
-                                 
-                              
- */
 #if defined (CONFIG_LGE_QC_LCDC_LUT)
 #include "lge_qlut.h"
 int g_qlut_change_by_kernel;
@@ -65,10 +61,6 @@ EXPORT_SYMBOL(g_qlut_change_by_kernel);
 #if defined(CONFIG_MACH_LGE) && \
 	(defined(CONFIG_FB_MSM_DEFAULT_DEPTH_ARGB8888) ||\
 	 defined(CONFIG_FB_MSM_DEFAULT_DEPTH_RGBA8888))
-/*           
-                               
-                                   
- */
 extern int load_888rle_image(char *filename);
 #else /*qct original code */
 extern int load_565rle_image(char *filename);
@@ -76,11 +68,6 @@ extern int load_565rle_image(char *filename);
 #endif
 #ifdef CONFIG_FB_MSM_TRIPLE_BUFFER
 #define MSM_FB_NUM	3
-#endif
-
-#ifdef CONFIG_LGE_PM_TRKLCHG_IN_KERNEL
-#define TRKL_BL_LEVEL 10
-#define PWR_ON_EVENT_USB_CHG		0x20
 #endif
 
 static unsigned char *fbram;
@@ -176,16 +163,7 @@ static int mdp_bl_scale_config(struct msm_fb_data_type *mfd,
 						struct mdp_bl_scale_data *data);
 static void msm_fb_scale_bl(__u32 *bl_lvl);
 static bool is_factory_cable_for_backlight(void);
-#ifdef CONFIG_LGE_PM_TRKLCHG_IN_KERNEL
-extern uint16_t power_on_status_info_get(void);
-#endif
 
-/*                              
-                                                        */
-#ifdef CONFIG_LGE_DISP_FBREAD
-static ssize_t msm_fb_read(struct fb_info *info, char __user *buf,
-		size_t count, loff_t *ppos);
-#endif
 #ifdef MSM_FB_ENABLE_DBGFS
 
 #define MSM_FB_MAX_DBGFS 1024
@@ -207,9 +185,7 @@ void msmfb_no_update_notify_timer_cb(unsigned long data)
 
 static int unset_bl_level, bl_updated;
 static int bl_level_old;
-#if defined ( CONFIG_FB_MSM_MIPI_TX11D108VM_R69324A_VIDEO_QHD_PT )
-static int is_fist_lcd_power_on = 0;
-#endif
+
 struct dentry *msm_fb_get_debugfs_root(void)
 {
 	if (msm_fb_debugfs_root == NULL)
@@ -244,38 +220,18 @@ static int msm_fb_resource_initialized;
 #if defined(CONFIG_MACH_LGE) && \
 	(defined(CONFIG_FB_MSM_DEFAULT_DEPTH_ARGB8888) ||\
 	 defined(CONFIG_FB_MSM_DEFAULT_DEPTH_RGBA8888))
-
-/*           
-                         
-                                   
- */
 static int saved_backlight_level = 150;
 static int ftm_backlight_level = 40;
 #endif
 #ifndef CONFIG_FB_BACKLIGHT
 static int lcd_backlight_registered;
-#if defined ( CONFIG_FB_MSM_MIPI_TX11D108VM_R69324A_VIDEO_QHD_PT )	
-extern int debug_lcd_backlight_level[15];
-extern int debug_lcd_backlight_cnt;
-char debug_print_flag = 0;
-#endif
+
 static void msm_fb_set_bl_brightness(struct led_classdev *led_cdev,
 					enum led_brightness value)
 {
 	struct msm_fb_data_type *mfd = dev_get_drvdata(led_cdev->dev->parent);
 	int bl_lvl;
-#if defined ( CONFIG_FB_MSM_MIPI_TX11D108VM_R69324A_VIDEO_QHD_PT )	
-	int i;
-	if (debug_print_flag == 0)
-	{
-		for(i=0; i<10;i++)
-		{
-			printk("%s, %d: debug_lcd_backlight_level = %d\n", __func__, __LINE__, debug_lcd_backlight_level[i]);
-		}
-		printk("%s, %d: value = %d\n", __func__,  __LINE__, value);
-		debug_print_flag = 1;
-	}
-#endif	
+
 	if (value > MAX_BACKLIGHT_BRIGHTNESS)
 		value = MAX_BACKLIGHT_BRIGHTNESS;
 
@@ -956,11 +912,6 @@ void msm_fb_set_backlight(struct msm_fb_data_type *mfd, __u32 bkl_lvl)
 	if (!mfd->panel_power_on || !bl_updated) {
 		unset_bl_level = bkl_lvl;
 #ifdef CONFIG_MACH_LGE
-		/*           
-                             
-                                                                 
-                                     
-   */
 		if (system_state != SYSTEM_BOOTING)
 #endif
 		return;
@@ -987,10 +938,6 @@ static int msm_fb_blank_sub(int blank_mode, struct fb_info *info,
 {
 	struct msm_fb_data_type *mfd = (struct msm_fb_data_type *)info->par;
 	struct msm_fb_panel_data *pdata = NULL;
-#ifdef CONFIG_LGE_LCD_TUNING
-	struct fb_info *fbi;
-	struct fb_var_screeninfo *var;
-#endif
 	int ret = 0;
 #ifdef CONFIG_MACH_LGE
 	static int old_power_on = 0;
@@ -1009,19 +956,6 @@ static int msm_fb_blank_sub(int blank_mode, struct fb_info *info,
 	case FB_BLANK_UNBLANK:
 		if (!mfd->panel_power_on) {
 			msleep(16);
-#ifdef CONFIG_LGE_LCD_TUNING
-			fbi = mfd->fbi;
-			var = &fbi->var;
-			var->left_margin = msm_fb_pdata->porch[0];
-			var->right_margin = msm_fb_pdata->porch[1];
-			var->upper_margin = msm_fb_pdata->porch[3];
-			var->lower_margin = msm_fb_pdata->porch[4];
-
-			var->hsync_len = msm_fb_pdata->porch[2];
-			var->vsync_len= msm_fb_pdata->porch[5];
-			printk("%s, hbp = %d, hfp = %d, vbp = %d, vfp = %d, hsp = %d, vsp = %d\n",__func__,
-				var->left_margin, var->right_margin, var->upper_margin, var->lower_margin, var->hsync_len,var->vsync_len);
-#endif
 #ifdef CONFIG_MACH_LGE
 			if(old_power_on == 0)
 			{
@@ -1066,22 +1000,10 @@ static int msm_fb_blank_sub(int blank_mode, struct fb_info *info,
 			curr_pwr_state = mfd->panel_power_on;
 			mfd->panel_power_on = FALSE;
 			cancel_delayed_work_sync(&mfd->backlight_worker);
-
 #ifdef CONFIG_MACH_LGE
 	if(mfd->index == 0)
 #endif
 			bl_updated = 0;
-
-#if defined ( CONFIG_FB_MSM_MIPI_TX11D108VM_R69324A_VIDEO_QHD_PT )
-			if ( is_fist_lcd_power_on == 0 || ((mfd->bl_level > 0) && (mfd->bl_level < 256)) )
-			{
-				unset_bl_level = mfd->bl_level;
-				schedule_delayed_work(&mfd->backlight_worker,
-										backlight_duration);
-				if ( is_fist_lcd_power_on == 0 )
-					is_fist_lcd_power_on = 1;
-			}
-#endif
 
 #ifdef CONFIG_MACH_LGE 
 			msleep(16*4);
@@ -1265,11 +1187,7 @@ static struct fb_ops msm_fb_ops = {
 	.owner = THIS_MODULE,
 	.fb_open = msm_fb_open,
 	.fb_release = msm_fb_release,
-#ifdef CONFIG_LGE_DISP_FBREAD
-    .fb_read = msm_fb_read,
-#else
 	.fb_read = NULL,
-#endif
 	.fb_write = NULL,
 	.fb_cursor = NULL,
 	.fb_check_var = msm_fb_check_var,	/* vinfo check */
@@ -1310,11 +1228,6 @@ static int msm_fb_register(struct msm_fb_data_type *mfd)
 	int *id;
 	int fbram_offset;
 	int remainder, remainder_mode2;
-
-#ifdef CONFIG_LGE_PM_TRKLCHG_IN_KERNEL
-	uint16_t boot_cause = 0;
-	int is_battery_low = 0;
-#endif
 
 	/*
 	 * fb info initialization
@@ -1676,15 +1589,6 @@ static int msm_fb_register(struct msm_fb_data_type *mfd)
 			printk(KERN_WARNING "fail to load 888 rle image\n");
 		msm_fb_pan_display(var, fbi);
 		mdelay(20);
-
-#ifdef CONFIG_LGE_PM_TRKLCHG_IN_KERNEL
-		boot_cause = power_on_status_info_get();
-		is_battery_low = is_battery_low_in_lk();
-		if (boot_cause == PWR_ON_EVENT_USB_CHG && is_battery_low) {
-			saved_backlight_level = TRKL_BL_LEVEL;
-			pr_info("backlight level will be decreased!!, boot_cause=%d, is_battery_low=%d \n", boot_cause, is_battery_low);
-		}
-#endif
 		if(is_factory_cable_for_backlight() == 1)
 			msm_fb_set_backlight(mfd, ftm_backlight_level);
 		else
@@ -1695,7 +1599,6 @@ static int msm_fb_register(struct msm_fb_data_type *mfd)
 		;
 #endif
 #endif
-
 	ret = 0;
 
 #ifdef CONFIG_HAS_EARLYSUSPEND
@@ -1910,26 +1813,10 @@ static void bl_workqueue_handler(struct work_struct *work)
 
 	if ((pdata) && (pdata->set_backlight) && (!bl_updated)) {
 		down(&mfd->sem);
-#if defined ( CONFIG_FB_MSM_MIPI_TX11D108VM_R69324A_VIDEO_QHD_PT )
-		if (mfd->panel_power_on == FALSE)
-		{
-			mfd->bl_level = 0;
-			pdata->set_backlight(mfd);
-			bl_level_old = 0;
-		}
-		else
-		{
-			mfd->bl_level = unset_bl_level;
-			pdata->set_backlight(mfd);
-			bl_level_old = unset_bl_level;
-			bl_updated = 1;
-		}
-#else
 		mfd->bl_level = unset_bl_level;
 		pdata->set_backlight(mfd);
 		bl_level_old = unset_bl_level;
 		bl_updated = 1;
-#endif
 		up(&mfd->sem);
 	}
 }
@@ -4157,80 +4044,6 @@ int msm_fb_v4l2_update(void *par,
 #endif
 }
 EXPORT_SYMBOL(msm_fb_v4l2_update);
-#ifdef CONFIG_LGE_DISP_FBREAD
-static ssize_t
-msm_fb_read(struct fb_info *info, char __user *buf, size_t count, loff_t *ppos)
-{
-
-    unsigned long p = *ppos;
-    u32 *buffer;
-    u8 *dst;
-    u8 __iomem *src;
-    u8 r, g, b;
-    int c, i, cnt = 0, err = 0;
-    unsigned long total_size;
-    int line_length, xres, bpp;
-
-	total_size = info->screen_size;
-
-    if (total_size == 0)
-        total_size = info->fix.smem_len;
-
-    if (p >= total_size)
-		return 0;
-
-	if (count >= total_size)
-        count = total_size;
-
-	if (count + p > total_size)
-		count = total_size - p;
-
-	buffer = kmalloc((count > PAGE_SIZE) ? PAGE_SIZE : count,
-			GFP_KERNEL);
-
-	if (!buffer)
-		return -ENOMEM;
-
-    src = (u8 __iomem *) (info->screen_base + p);
-
-    xres = info->var.xres;
-    line_length = ALIGN(xres, 32);
-
-    bpp = info->var.bits_per_pixel/8;
-
-    for (i = 0; i < count; i += 4){
-
-		c = 4;
-		r = fb_readb(src++);
-		g = fb_readb(src++);
-		b = fb_readb(src++);
-		src++;
-
-		*ppos += c;
-
-		if ((p+i)%(line_length*bpp) >= xres*bpp)
-			continue;
-
-		dst = (u8 *)buffer;
-		*dst++ = r;
-		*dst++ = g;
-		*dst++ = b;
-		*dst++ = 0xff;
-
-		if (copy_to_user(buf, buffer, c)) {
-			err = -EFAULT;
-			break;
-		}
-
-		cnt += c;
-		buf += c;
-	}
-
-    kfree(buffer);
-
-    return (err) ? err : cnt;
-}
-#endif
 
 #if defined(CONFIG_LGE_QC_LCDC_LUT)
 int lge_set_qlut(void)

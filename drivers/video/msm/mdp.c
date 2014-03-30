@@ -491,17 +491,12 @@ static int mdp_lut_i;
 #ifdef CONFIG_LGE_QC_LCDC_LUT
 extern int g_qlut_change_by_kernel;
 extern uint32 p_lg_qc_lcdc_lut[];
-
-/*           
-                                  
-                              
- */
 #ifdef CONFIG_LGE_KCAL_QLUT
 extern int g_kcal_r;
 extern int g_kcal_g;
 extern int g_kcal_b;
-#endif /*                      */
-#endif /*                        */
+#endif
+#endif
 static int mdp_lut_hw_update(struct fb_cmap *cmap)
 {
 	int i;
@@ -2567,7 +2562,7 @@ static int mdp_irq_clk_setup(struct platform_device *pdev,
 	if (IS_ERR(dsi_pll_vdda)) {
 		dsi_pll_vdda = NULL;
 	} else {
-#ifdef CONFIG_MACH_LGE /*            */
+#ifdef CONFIG_MACH_LGE
 		if (mdp_rev >= MDP_REV_42 && mdp_rev <= MDP_REV_44) {
 #else
 		if (mdp_rev == MDP_REV_42 || mdp_rev == MDP_REV_44) {
@@ -2585,7 +2580,7 @@ static int mdp_irq_clk_setup(struct platform_device *pdev,
 	if (IS_ERR(dsi_pll_vddio)) {
 		dsi_pll_vddio = NULL;
 	} else {
-#ifdef CONFIG_MACH_LGE /*            */
+#ifdef CONFIG_MACH_LGE
 		if (mdp_rev >= MDP_REV_42) {
 #else
 		if (mdp_rev == MDP_REV_42) {
@@ -2656,7 +2651,7 @@ static int mdp_irq_clk_setup(struct platform_device *pdev,
 	MSM_FB_DEBUG("mdp_clk: mdp_clk=%d\n", (int)clk_get_rate(mdp_clk));
 #endif
 
-#ifdef CONFIG_MACH_LGE /*            */
+#ifdef CONFIG_MACH_LGE
 	if (mdp_rev >= MDP_REV_42 && !cont_splashScreen) {
 #else
 	if (mdp_rev == MDP_REV_42 && !cont_splashScreen) {

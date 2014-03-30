@@ -801,7 +801,6 @@ unsigned int msm_hs_tx_empty(struct uart_port *uport)
 }
 EXPORT_SYMBOL(msm_hs_tx_empty);
 
-//                                             
 //ADD: 0019639: [F200][BT] Support Bluetooth low power mode
 #ifdef CONFIG_LGE_BLUESLEEP
 struct uart_port* msm_hs_get_bt_uport(unsigned int line)
@@ -810,15 +809,10 @@ struct uart_port* msm_hs_get_bt_uport(unsigned int line)
 }
 EXPORT_SYMBOL(msm_hs_get_bt_uport);
 
-// Get UART Clock State : 
 int msm_hs_get_bt_uport_clock_state(struct uart_port *uport)
 {
 	struct msm_hs_port *msm_uport = UARTDM_TO_MSM(uport);
-	//unsigned long flags;	
 	int ret = CLOCK_REQUEST_UNAVAILABLE;
-
-	//mutex_lock(&msm_uport->clk_mutex);
-	//spin_lock_irqsave(&uport->lock, flags);
 
 	switch(msm_uport->clk_state)
 	{
@@ -834,16 +828,10 @@ int msm_hs_get_bt_uport_clock_state(struct uart_port *uport)
 			break;
 	}
 
-	//spin_unlock_irqrestore(&uport->lock, flags);
-	//mutex_unlock(&msm_uport->clk_mutex);
-
 	return ret;
 }
 EXPORT_SYMBOL(msm_hs_get_bt_uport_clock_state);
-
-
-#endif/*                    */
-//                                           
+#endif
 
 /*
  *  Standard API, Stop transmitter.

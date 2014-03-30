@@ -1153,10 +1153,6 @@ static int mmc_sd_resume(struct mmc_host *host)
 		err = mmc_sd_init_card(host, host->ocr, host->card);
 
 #ifdef CONFIG_MACH_LGE
-		/*           
-                             
-                                  
-  */
 		if (err == ENOMEDIUM) {
 			printk(KERN_INFO "[LGE][MMC][%-18s( )] error:ENOMEDIUM\n", __func__);
 			break;

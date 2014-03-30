@@ -255,13 +255,6 @@ struct mtp_ext_config_desc_function {
 	__u8	reserved[6];
 };
 
-/*           
-                                                               
-                                                                            
-                                                                   
-                                   
- */
-
 /* MTP Extended Configuration Descriptor */
 struct {
 	struct mtp_ext_config_desc_header	header;
@@ -1080,7 +1073,6 @@ static int mtp_ctrlrequest(struct usb_composite_dev *cdev,
 	} else if ((ctrl->bRequestType & USB_TYPE_MASK) == USB_TYPE_CLASS) {
 		DBG(cdev, "class request: %d index: %d value: %d length: %d\n",
 			ctrl->bRequest, w_index, w_value, w_length);
-
 
 		/* Fix Windows 7 Bug at PCSync
 		 * In mtp usb request, MTP_REQ_CANCEL and MTP_REQ_GET_DEVICE_STATUS has w_index(USB interface number) parameter.

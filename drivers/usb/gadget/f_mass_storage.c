@@ -317,10 +317,6 @@ static const char fsg_string_interface[] = "Mass Storage";
 
 #define FUNCTION_NAME "cdrom_storage"
 
-/*                                       
-                                  
-                                   
- */
 #define SC_LGE_SPE              0xF1
 #define SUB_CODE_MODE_CHANGE    0x01
 #define SUB_CODE_GET_VALUE      0x02
@@ -369,10 +365,7 @@ static int csw_hack_sent;
 struct fsg_dev;
 struct fsg_common;
 #ifdef CONFIG_USB_G_LGE_ANDROID_AUTORUN
-/*                                             
-                                     
-                                   
- */
+
 static char *envp_ack[2] = {"AUTORUN=ACK", NULL};
 
 #ifdef CONFIG_USB_G_LGE_ANDROID_AUTORUN_VZW
@@ -534,7 +527,6 @@ struct fsg_common {
 	 */
 	char inquiry_string[8 + 16 + 4 + 1];
 #ifdef CONFIG_USB_G_LGE_ANDROID_AUTORUN
-	/*                         */
 	enum chg_mode_state mode_state;
 #endif
         /* VZW - check usb driver installed or not */
@@ -1413,9 +1405,6 @@ static int do_inquiry(struct fsg_common *common, struct fsg_buffhd *bh)
 	return 36;
 }
 #ifdef CONFIG_USB_G_LGE_ANDROID_AUTORUN
-/*                                                           
-                                   
- */
 static int do_ack_status(struct fsg_common *common, struct fsg_buffhd *bh, u8 ack)
 {
 	u8	*buf = (u8 *) bh->buf;
@@ -1429,20 +1418,6 @@ static int do_ack_status(struct fsg_common *common, struct fsg_buffhd *bh, u8 ac
 
 	buf[0] = ack;
 
-/*  Old froyo version */
-/* 	if(ack == SUB_ACK_STATUS_ACM)
-		buf[0] = SUB_ACK_STATUS_ACM;
-	else if(ack == SUB_ACK_STATUS_MTP)
-		buf[0] = SUB_ACK_STATUS_MTP;
-	else if(ack == SUB_ACK_STATUS_UMS)
-		buf[0] = SUB_ACK_STATUS_UMS;
-	else if(ack == SUB_ACK_STATUS_ASK)
-		buf[0] = SUB_ACK_STATUS_ASK;
-	else if(ack == SUB_ACK_STATUS_CGO)
-		buf[0] = SUB_ACK_STATUS_CGO;
-	else if(ack == SUB_ACK_STATUS_TET)
-		buf[0] = SUB_ACK_STATUS_TET;
-*/
 	return 1;
 }
 
@@ -1664,7 +1639,6 @@ static int do_read_toc(struct fsg_common *common, struct fsg_buffhd *bh)
 	store_cdrom_address(&buf[16], msf, curlun->num_sectors);
 	return 20;
 #endif
-
 }
 
 static int do_mode_sense(struct fsg_common *common, struct fsg_buffhd *bh)

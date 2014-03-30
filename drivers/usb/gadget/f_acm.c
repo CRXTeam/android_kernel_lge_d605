@@ -703,11 +703,6 @@ static void acm_connect(struct gserial *port)
 	acm_notify_serial_state(acm);
 }
 
-/*                
-                
-                                 
- */
-
 unsigned int acm_get_dtr(struct gserial *port)
 {
 	struct f_acm		*acm = port_to_acm(port);
@@ -758,7 +753,6 @@ unsigned int acm_send_ring_indicator(struct gserial *port, unsigned int yes)
 	return acm_notify_serial_state(acm);
 
 }
-/*               */
 
 static void acm_disconnect(struct gserial *port)
 {
@@ -997,15 +991,10 @@ int acm_bind_config(struct usb_configuration *c, u8 port_num)
 	acm->transport = gacm_ports[port_num].transport;
 
 	acm->port.connect = acm_connect;
-/*                
-                
-                                 
- */
 	acm->port.get_dtr = acm_get_dtr;
 	acm->port.get_rts = acm_get_rts;
 	acm->port.send_carrier_detect = acm_send_carrier_detect;
 	acm->port.send_ring_indicator = acm_send_ring_indicator;
-/*               */
 	acm->port.disconnect = acm_disconnect;
 	acm->port.send_break = acm_send_break;
 	acm->port.send_modem_ctrl_bits = acm_send_modem_ctrl_bits;

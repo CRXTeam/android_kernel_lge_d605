@@ -33,7 +33,6 @@
 #define ANDROID_ALARM_PRINT_INT (1U << 5)
 #define ANDROID_ALARM_PRINT_FLOW (1U << 6)
 
-/*                                              */
 #ifdef CONFIG_MACH_LGE
 static int debug_mask = ANDROID_ALARM_PRINT_ERROR | \
 			ANDROID_ALARM_PRINT_TSET | \
@@ -259,7 +258,6 @@ int alarm_set_rtc(struct timespec new_time)
 	struct rtc_time rtc_new_rtc_time;
 	struct timespec tmp_time;
 
-/*                              */
 #ifdef CONFIG_MACH_LGE
 	pr_alarm(CALL, "%s: caller %s\n", __func__, current->comm);
 #endif

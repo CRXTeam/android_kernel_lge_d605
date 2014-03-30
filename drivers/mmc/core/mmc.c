@@ -1335,7 +1335,6 @@ static int mmc_init_card(struct mmc_host *host, u32 ocr,
 			 * a default value is used.
 			 */
 			card->bkops_info.delay_ms = MMC_IDLE_BKOPS_TIME_MS;
-/*            */
 #ifndef BKOPS_UPDATE
             if (card->bkops_info.host_delay_ms)
                 card->bkops_info.delay_ms = card->bkops_info.host_delay_ms;
@@ -1458,7 +1457,7 @@ static int mmc_suspend(struct mmc_host *host)
 	BUG_ON(!host->card);
 
 	mmc_claim_host(host);
-/*            */
+
 #ifndef BKOPS_UPDATE
 	err = mmc_cache_ctrl(host, 0);
 	if (err)
@@ -1473,7 +1472,7 @@ static int mmc_suspend(struct mmc_host *host)
 	else if (!mmc_host_is_spi(host))
 		mmc_deselect_cards(host);
 	host->card->state &= ~(MMC_STATE_HIGHSPEED | MMC_STATE_HIGHSPEED_200);
-/*            */
+
 #ifndef BKOPS_UPDATE
 out:
 #else

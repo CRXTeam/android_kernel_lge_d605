@@ -150,6 +150,8 @@ static struct workqueue_struct *gserial_wq;
 
 #define GS_CLOSE_TIMEOUT		15		/* seconds */
 
+
+
 #ifdef VERBOSE_DEBUG
 #define pr_vdebug(fmt, arg...) \
 	pr_debug(fmt, ##arg)
@@ -1347,14 +1349,7 @@ static void usb_debugfs_init(struct gs_port *ui_dev, int port_num)
 		return;
 
 	debugfs_create_file("readstatus", 0444, dent, ui_dev, &debug_adb_ops);
-	/*                                  
-                                                              
-                               
-                                                 
-                                                                                    
-  */
 	debugfs_create_file("reset", 0220, dent, ui_dev, &debug_rst_ops);
-	/*              */
 }
 #else
 static void usb_debugfs_init(struct gs_port *ui_dev) {}

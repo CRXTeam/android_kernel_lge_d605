@@ -19,11 +19,9 @@
 
 #include "power_supply.h"
 
-/* [START] sungsookim */
 #ifdef CONFIG_LGE_PM
 #include <mach/board_lge.h>
 #endif
-/* [END] */
 /*
  * This is because the name "current" breaks the device attr macro.
  * The "current" word resolves to "(get_current())" so instead of
@@ -35,7 +33,7 @@
  * Only modification that the name is not tried to be resolved
  * (as a macro let's say).
  */
-/* [START] sungsookim */
+
 #ifdef CONFIG_LGE_PM
 #define PSEUDO_BATT_ATTR(_name)						\
 {									\
@@ -49,27 +47,15 @@
 	.show = block_charging_show_property,				\
 	.store = block_charging_store_property,				\
 }
-#ifdef CONFIG_MACH_LGE_FX3_VZW
-#define CHARGING_TIMER_ATTR(_name)					\
-{									\
-	.attr = { .name = #_name, .mode = 0644 },			\
-	.show = charging_timer_show_property,				\
-	.store = charging_timer_store_property,				\
-}
 #endif
-#endif
-/* [END] */
-
 
 #if defined(CONFIG_MACH_LGE_L9II_COMMON)
-/*                                                                     */
 #define OFF_BATT_ATTR(_name)						\
 {									\
 	.attr = { .name = #_name, .mode = 0664 },			\
 	.show = off_batt_show_property,				\
 	.store = off_batt_store_property,				\
 }
-/*                                                                   */
 #endif
 
 
@@ -229,10 +215,7 @@ out:
 	return ret;
 }
 
-
 #if defined(CONFIG_MACH_LGE_L9II_COMMON)
-
-/*                                                                     */
 static ssize_t off_batt_show_property(struct device *dev,
 		struct device_attribute *attr,
 		char *buf)
@@ -332,55 +315,6 @@ static ssize_t block_charging_store_property(struct device *dev,
 out:
 	return ret;
 }
-
-#ifdef CONFIG_MACH_LGE_FX3_VZW
-extern void stop_chg_upon_expiry_set(int);
-static ssize_t charging_timer_show_property(struct device *dev,
-		struct device_attribute *attr,
-		char *buf)
-{
-	ssize_t ret;
-	struct power_supply *psy = dev_get_drvdata(dev);
-	const ptrdiff_t off = attr - power_supply_attrs;
-	union power_supply_propval value;
-
-	static char *chg_timer_mode[] = {
-		"CONTINUE CHARGING", "NORMAL",
-	};
-
-	ret = psy->get_property(psy, off, &value);
-
-	if (ret < 0) {
-		if (ret != -ENODEV)
-			dev_err(dev, "driver failed to report `%s' property\n",
-					attr->attr.name);
-		return ret;
-	}
-	if (off == POWER_SUPPLY_PROP_STOP_CHG_UPON_EXPIRY)
-		return sprintf(buf, "[%s] \n", chg_timer_mode[value.intval]);
-
-	return 0;
-}
-
-static ssize_t charging_timer_store_property(struct device *dev,
-		struct device_attribute *attr,
-		const char *buf, size_t count)
-{
-	int ret = -EINVAL;
-	int on;
-
-	if(sscanf(buf, "%d", &on) != 1)
-	{
-		printk("%s:Too many argument\n",__func__);
-		goto out;
-	}
-	printk("%s:stop charging=%d\n",__func__,on);
-	stop_chg_upon_expiry_set(on);
-	ret = count;
-out:
-	return ret;
-}
-#endif
 #endif
 /* [END] */
 /* Must be in the same order as POWER_SUPPLY_PROP_* */
@@ -434,28 +368,14 @@ static struct device_attribute power_supply_attrs[] = {
 	POWER_SUPPLY_ATTR(model_name),
 	POWER_SUPPLY_ATTR(manufacturer),
 	POWER_SUPPLY_ATTR(serial_number),
-/* [START] sungsookim */
 #ifdef CONFIG_LGE_PM
 	PSEUDO_BATT_ATTR(pseudo_batt),
 	BLOCK_CHARGING_ATTR(block_charging),
 	POWER_SUPPLY_ATTR(ext_pwr),
-#ifdef CONFIG_MACH_LGE_FX3_VZW
-	CHARGING_TIMER_ATTR(charging_timer),
 #endif
-#endif
-#ifdef CONFIG_LGE_PM_VZW_FAST_CHG
-	POWER_SUPPLY_ATTR(vzw_chg),
-#endif
-/* [END] */
-
-
 #if defined(CONFIG_MACH_LGE_L9II_COMMON)
-
-/*                                                                     */
-
 	OFF_BATT_ATTR(off_batt),
 #endif
-
 };
 
 static struct attribute *

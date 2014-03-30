@@ -988,17 +988,11 @@ int gether_setup_name(struct usb_gadget *g, u8 ethaddr[ETH_ALEN],
 	int			status;
 
 	if (the_dev)
-	{
-		pr_info("%s: the_dev is NOT NULL!! It means that this call could be the second with no gether_cleanup of first ecm bind!!\n", __func__);
-		return 1; 
-	}
+		return 1;
 
 	net = alloc_etherdev(sizeof *dev);
 	if (!net)
-	{
-		pr_info("%s: net is NULL!!\n", __func__);
 		return -ENOMEM;
-	}
 
 	dev = netdev_priv(net);
 	spin_lock_init(&dev->lock);
@@ -1070,17 +1064,13 @@ int gether_setup_name(struct usb_gadget *g, u8 ethaddr[ETH_ALEN],
 void gether_cleanup(void)
 {
 	if (!the_dev)
-	{
-		pr_info("gether_cleanup() the_dev is already NULL!!\n");
 		return;
-	}
 
 	unregister_netdev(the_dev->net);
 	flush_work_sync(&the_dev->work);
 	free_netdev(the_dev->net);
 
 	the_dev = NULL;
-	pr_info("gether_cleanup() completed!!\n");
 }
 
 

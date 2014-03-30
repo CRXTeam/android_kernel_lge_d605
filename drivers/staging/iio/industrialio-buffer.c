@@ -60,9 +60,8 @@ unsigned int iio_buffer_poll(struct file *filp,
                 return POLLIN | POLLRDNORM;
 
 	poll_wait(filp, &rb->pollq, wait);
-        if (rb->stufftoread)
-                return POLLIN | POLLRDNORM;
-
+	if (rb->stufftoread)
+		return POLLIN | POLLRDNORM;
 	/* need a way of knowing if there may be enough data... */
 	return 0;
 }

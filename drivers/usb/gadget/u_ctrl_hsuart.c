@@ -538,10 +538,6 @@ static int ghsuart_ctrl_debugfs_init(void)
 	if (!ghsuart_ctrl_dent || IS_ERR(ghsuart_ctrl_dent))
 		return -ENODEV;
 
-	/*           
-                                              
-                                   
-  */
 	ghsuart_ctrl_dfile =
 		debugfs_create_file("status", S_IRUGO | S_IWUSR,
 				ghsuart_ctrl_dent, 0, &ghsuart_ctrl_stats_ops);

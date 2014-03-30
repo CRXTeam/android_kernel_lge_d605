@@ -253,7 +253,7 @@ struct mmc_card *mmc_alloc_card(struct mmc_host *host, struct device_type *type)
 	card->dev.bus = &mmc_bus_type;
 	card->dev.release = mmc_release_card;
 	card->dev.type = type;
-/*            */
+
 #ifndef BKOPS_UPDATE
     spin_lock_init(&card->bkops_info.bkops_stats.lock);
 #endif
@@ -327,14 +327,6 @@ int mmc_add_card(struct mmc_card *card)
 			uhs_bus_speed_mode, type, card->rca);
 	}
 
-#ifdef CONFIG_MACH_LGE
-	/*           
-               
-                                 
- */
-	printk(KERN_INFO "[LGE][MMC][%-18s( )] mmc_hostname:%s, type:%s\n", __func__, mmc_hostname(card->host), type);
-#endif
-
 #ifdef CONFIG_DEBUG_FS
 	mmc_add_card_debugfs(card);
 #endif
@@ -342,10 +334,6 @@ int mmc_add_card(struct mmc_card *card)
 	ret = device_add(&card->dev);
 
 #ifdef CONFIG_MACH_LGE
-	/*           
-               
-                                 
- */
 	if (ret) {
 		printk(KERN_INFO "[LGE][MMC][%-18s( )] device_add & uevent posting fail!, ret:%d \n", __func__, ret);
 		return ret;

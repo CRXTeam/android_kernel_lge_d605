@@ -58,11 +58,6 @@
 #include <mach/mpm.h>
 
 #ifdef CONFIG_MACH_LGE
-	/*           
-                                                             
-                           
-                            
- */
 	#if defined(CONFIG_MACH_MSM8960_L_DCM)
 	#include <mach/board_lge.h>
 	#endif
@@ -281,7 +276,6 @@ static int msmsdcc_bam_dml_reset_and_restore(struct msmsdcc_host *host)
 	}
 
 	rc = msmsdcc_sps_restore_ep(host, &host->sps.cons);
-/*            */
 #ifdef NON_DMLRESET_PATCH 
 	if (rc) {
 		pr_err("%s: msmsdcc_sps_restore_ep(cons) error=%d\n",
@@ -1273,7 +1267,6 @@ msmsdcc_start_command_deferred(struct msmsdcc_host *host,
 		writel_relaxed((readl_relaxed(host->base +
 				MCI_DLL_CONFIG) & ~MCI_CDR_EN),
 				host->base + MCI_DLL_CONFIG);
-/*            */
 #ifndef BKOPS_UPDATE
 /*
 02-14
@@ -1696,10 +1689,6 @@ msmsdcc_pio_irq(int irq, void *dev_id)
 			break;
 
 #ifdef CONFIG_MACH_LGE
-		/*           
-                                                           
-                                  
-  */
 		if(!host->curr.data)
 		{
 			writel(0, base + MMCIMASK1);
@@ -4304,10 +4293,6 @@ msmsdcc_check_status(unsigned long data)
 			status = msmsdcc_slot_status(host);
 
 #ifdef CONFIG_MACH_LGE
-		/*           
-                
-                                  
-  */
 		printk(KERN_INFO "[LGE][MMC][%-18s( )] slot_status:%d, host->oldstat:%d, host->eject:%d\n", __func__, status, host->oldstat, host->eject);
 #endif 
 		
@@ -4345,10 +4330,6 @@ msmsdcc_platform_status_irq(int irq, void *dev_id)
 	struct msmsdcc_host *host = dev_id;
 
 #ifdef CONFIG_MACH_LGE
-	/*           
-               
-                                 
- */
 	printk(KERN_INFO "[LGE][MMC][%-18s( )] irq:%d\n", __func__, irq);
 #endif
 
@@ -5161,7 +5142,6 @@ static void msmsdcc_req_tout_timer_hdlr(unsigned long data)
 	mrq = host->curr.mrq;
 
 	if (mrq && mrq->cmd) {
-/*            */
 #ifndef BKOPS_UPDATE        
 		if (!mrq->cmd->bkops_busy) {
 			pr_info("%s: CMD%d: Request timeout\n",
@@ -5952,11 +5932,6 @@ msmsdcc_probe(struct platform_device *pdev)
 	mmc->caps |= plat->mmc_bus_width;
 	mmc->caps |= MMC_CAP_MMC_HIGHSPEED | MMC_CAP_SD_HIGHSPEED;
 #ifdef CONFIG_MACH_LGE
-	/*           
-                                                             
-                           
-                            
- */
 	#if defined(CONFIG_MACH_MSM8960_L_DCM)
 		if (lge_get_board_revno() >= HW_REV_D) {
 			mmc->caps |= MMC_CAP_WAIT_WHILE_BUSY | MMC_CAP_ERASE;
@@ -5969,7 +5944,6 @@ msmsdcc_probe(struct platform_device *pdev)
 #else
 	mmc->caps |= MMC_CAP_WAIT_WHILE_BUSY | MMC_CAP_ERASE;
 #endif
-
 	mmc->caps |= MMC_CAP_HW_RESET;
 	/*
 	 * If we send the CMD23 before multi block write/read command
@@ -6744,7 +6718,6 @@ static int msmsdcc_runtime_resume(struct device *dev)
 }
 #endif
 
-/*            */
 int sdc_clock_enable(struct mmc_host *mmc)
 {
 	struct msmsdcc_host *host = mmc_priv(mmc);
@@ -6773,29 +6746,15 @@ void
 msmsdcc_set_mmc_enable(int card_present, void *dev_id)
 {
 	struct msmsdcc_host *host = dev_id;
-//	struct device *dev = host->mmc->parent;
-	//wifi_enable=1;
 
-	if(card_present)
-	{
-//		msmsdcc_runtime_resume(dev);
-//		if (msmsdcc_enable(host->mmc))
-//			printk("[BIGLAKE] msmsdcc_enable fail!!!\n");;
+	if(card_present) {
 		if(sdc_clock_enable(host->mmc))
 			printk("[BIGLAKE] clk enable fail!!!\n");
 		
-	}
-	else
-	{
-//		msmsdcc_runtime_suspend(dev);
-//		if (msmsdcc_disable(host->mmc))
-//			printk("[BIGLAKE] msmsdcc_disable fail!!!\n");;
+	} else {
 		if(sdc_clock_disable(host->mmc))
 			printk("[BIGLAKE] clk disable fail!!!\n");
-
-		
 	}	
-	//wifi_enable=0;
 }
 
 static const struct dev_pm_ops msmsdcc_dev_pm_ops = {

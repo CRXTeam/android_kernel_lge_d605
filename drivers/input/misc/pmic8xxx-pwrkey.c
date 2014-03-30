@@ -54,9 +54,6 @@ static irqreturn_t pwrkey_press_irq(int irq, void *_pwrkey)
 	input_report_key(pwrkey->pwr, KEY_POWER, 1);
 	input_sync(pwrkey->pwr);
 
-	/*            */
-	printk("[pmic8xxx-pwrkey] POWER KEY PRESS\n");
-
 	return IRQ_HANDLED;
 }
 
@@ -74,8 +71,6 @@ static irqreturn_t pwrkey_release_irq(int irq, void *_pwrkey)
 
 	input_report_key(pwrkey->pwr, KEY_POWER, 0);
 	input_sync(pwrkey->pwr);
-    /*            */
-    printk("[pmic8xxx-pwrkey] POWER KEY RELEASE\n");
 
 	return IRQ_HANDLED;
 }

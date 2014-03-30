@@ -39,9 +39,6 @@ struct ci13xxx_udc_context {
 
 static struct ci13xxx_udc_context _udc_ctxt;
 
-#ifdef CONFIG_USB_G_LGE_ANDROID
-#endif
-
 static irqreturn_t msm_udc_irq(int irq, void *data)
 {
 	return udc_irq();
@@ -71,6 +68,7 @@ static void ci13xxx_msm_resume(void)
 	}
 }
 
+#if 0
 static const char *pm8038_irg_string(int e)
 {
 	switch (e) {
@@ -83,11 +81,11 @@ static const char *pm8038_irg_string(int e)
 	default:									return "UNDEFINED";
 	}
 }
+#endif
 
 static void ci13xxx_msm_notify_event(struct ci13xxx *udc, unsigned event)
 {
 	struct device *dev = udc->gadget.dev.parent;
-	printk("[USB : %s : %d] %s\n", __func__, __LINE__, pm8038_irg_string(event));
 
 	switch (event) {
 	case CI13XXX_CONTROLLER_RESET_EVENT:
@@ -120,7 +118,6 @@ static void ci13xxx_msm_notify_event(struct ci13xxx *udc, unsigned event)
 	}
 }
 
-//	#ifdef CONFIG_USB_OTG
 static irqreturn_t ci13xxx_msm_resume_irq(int irq, void *data)
 {
 	struct ci13xxx *udc = _udc;
@@ -132,7 +129,6 @@ static irqreturn_t ci13xxx_msm_resume_irq(int irq, void *data)
 
 	return IRQ_HANDLED;
 }
-//	#endif
 
 static struct ci13xxx_udc_driver ci13xxx_msm_udc_driver = {
 	.name			= "ci13xxx_msm",
@@ -150,7 +146,6 @@ static struct ci13xxx_udc_driver ci13xxx_msm_udc_driver = {
 	.notify_event		= ci13xxx_msm_notify_event,
 };
 
-//	#ifdef CONFIG_USB_OTG // HOST mode
 static int ci13xxx_msm_install_wake_gpio(struct platform_device *pdev,
 				struct resource *res)
 {
@@ -160,7 +155,6 @@ static int ci13xxx_msm_install_wake_gpio(struct platform_device *pdev,
 	dev_dbg(&pdev->dev, "ci13xxx_msm_install_wake_gpio\n");
 
 	_udc_ctxt.wake_gpio = res->start;
-//	printk("[USB : %s : %d] GPIO=%d\n", __func__, __LINE__, _udc_ctxt.wake_gpio);
 	gpio_request(_udc_ctxt.wake_gpio, "USB_RESUME");
 	gpio_direction_input(_udc_ctxt.wake_gpio);
 	wake_irq = gpio_to_irq(_udc_ctxt.wake_gpio);
@@ -187,17 +181,15 @@ gpio_free:
 	_udc_ctxt.wake_gpio = 0;
 	return ret;
 }
-//	#endif
 
 static void ci13xxx_msm_uninstall_wake_gpio(struct platform_device *pdev)
 {
 	dev_dbg(&pdev->dev, "ci13xxx_msm_uninstall_wake_gpio\n");
-//	#ifdef CONFIG_USB_OTG
+
 	if (_udc_ctxt.wake_gpio) {
 		gpio_free(_udc_ctxt.wake_gpio);
 		_udc_ctxt.wake_gpio = 0;
 	}
-//	#endif
 }
 
 static int ci13xxx_msm_probe(struct platform_device *pdev)
@@ -232,7 +224,6 @@ static int ci13xxx_msm_probe(struct platform_device *pdev)
 		goto udc_remove;
 	}
 
-//	#ifdef CONFIG_USB_OTG // HOST mode
 	res = platform_get_resource_byname(pdev, IORESOURCE_IO, "USB_RESUME");
 	if (res) {
 		ret = ci13xxx_msm_install_wake_gpio(pdev, res);
@@ -241,7 +232,6 @@ static int ci13xxx_msm_probe(struct platform_device *pdev)
 			goto udc_remove;
 		}
 	}
-//	#endif
 
 	ret = request_irq(_udc_ctxt.irq, msm_udc_irq, IRQF_SHARED, pdev->name,
 					  pdev);

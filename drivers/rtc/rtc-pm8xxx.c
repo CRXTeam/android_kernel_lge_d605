@@ -53,7 +53,6 @@ struct pm8xxx_rtc {
 	spinlock_t ctrl_reg_lock;
 };
 
-/*                          */
 static struct device *pm8xxx_rtc_rtc_dev  = NULL;
 static int rtc_reset = 0;
 static int pm8xxx_rtc_set_time(struct device *dev, struct rtc_time *tm);
@@ -83,7 +82,6 @@ static int pm8xxx_rtc_reset(const char *val, struct kernel_param *kp)
   return 0;
 }
 module_param_call(rtc_reset, pm8xxx_rtc_reset, param_get_int, &rtc_reset, S_IWUSR | S_IRUGO);
-/*              */
 
 /*
  * The RTC registers need to be read/written one byte at a time. This is a
@@ -504,9 +502,7 @@ static int __devinit pm8xxx_rtc_probe(struct platform_device *pdev)
 	}
 
 	rtc_dd->ctrl_reg = ctrl_reg;
-	/*              */
 	pm8xxx_rtc_rtc_dev = rtc_dd->rtc_dev;
-	/*              */
 	if (rtc_write_enable == true)
 		pm8xxx_rtc_ops.set_time = pm8xxx_rtc_set_time;
 

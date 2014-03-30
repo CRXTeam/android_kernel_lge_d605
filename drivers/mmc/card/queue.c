@@ -75,7 +75,6 @@ static int mmc_queue_thread(void *d)
 		spin_unlock_irq(q->queue_lock);
 
 		if (req || mq->mqrq_prev->req) {
-/*            */
 #ifndef BKOPS_UPDATE
 
 #else

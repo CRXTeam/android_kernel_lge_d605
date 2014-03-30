@@ -122,7 +122,6 @@ struct mmc_blk_data {
 	struct device_attribute force_ro;
 	struct device_attribute power_ro_lock;
 	struct device_attribute num_wr_reqs_to_start_packing;
-/*            */
 #ifndef BKOPS_UPDATE
 	struct device_attribute bkops_check_threshold;	
 #else    
@@ -312,7 +311,7 @@ num_wr_reqs_to_start_packing_store(struct device *dev,
 	mmc_blk_put(md);
 	return count;
 }
-/*            */
+
 #ifndef BKOPS_UPDATE
 static ssize_t
 bkops_check_threshold_show(struct device *dev,
@@ -2114,7 +2113,6 @@ static int mmc_blk_issue_rq(struct mmc_queue *mq, struct request *req)
 	}
 #endif
 
-/*            */
 #ifndef BKOPS_UPDATE
 	if (req && !mq->mqrq_prev->req) {
 		/* claim host only for the first request */
@@ -2163,7 +2161,6 @@ static int mmc_blk_issue_rq(struct mmc_queue *mq, struct request *req)
 	}
 
 out:
-/*            */
 #ifndef BKOPS_UPDATE
 	if (!req){
         if (mmc_card_need_bkops(card))
@@ -2194,7 +2191,7 @@ static struct mmc_blk_data *mmc_blk_alloc_req(struct mmc_card *card,
 {
 	struct mmc_blk_data *md;
 	int devidx, ret;
-/*            */
+
 #ifndef BKOPS_UPDATE    
 	unsigned int percentage =
 		BKOPS_SIZE_PERCENTAGE_TO_QUEUE_DELAYED_WORK;
@@ -2274,7 +2271,6 @@ static struct mmc_blk_data *mmc_blk_alloc_req(struct mmc_card *card,
 
 	blk_queue_logical_block_size(md->queue.queue, 512);
 	set_capacity(md->disk, size);
-/*            */
 #ifndef BKOPS_UPDATE
 	card->bkops_info.size_percentage_to_queue_delayed_work = percentage;
 	card->bkops_info.min_sectors_to_queue_delayed_work =
@@ -2472,8 +2468,6 @@ static int mmc_add_disk(struct mmc_blk_data *md)
 				 &md->num_wr_reqs_to_start_packing);
 	if (ret)
 		goto num_wr_reqs_to_start_packing_fail;
-    
-/*            */
 #ifndef BKOPS_UPDATE
 	md->bkops_check_threshold.show = bkops_check_threshold_show;
 	md->bkops_check_threshold.store = bkops_check_threshold_store;
@@ -2552,13 +2546,7 @@ static const struct mmc_fixup blk_fixups[] =
 		  MMC_QUIRK_BLK_NO_CMD23),
 	MMC_FIXUP("MMC32G", CID_MANFID_TOSHIBA, CID_OEMID_ANY, add_quirk_mmc,
 		  MMC_QUIRK_BLK_NO_CMD23),
-#if 0 // it seems to be some thing wrong with eMMC.
-		  #ifdef CONFIG_MACH_LGE
-/* Not supported for the packed command on Hynix v4.41 */
-	MMC_FIXUP("H4G1d", CID_MANFID_SKHYNIX, CID_OEMID_ANY, add_quirk_mmc,
-			  MMC_QUIRK_BLK_NO_CMD23),
-#endif
-#endif
+
 	/*
 	 * Some Micron MMC cards needs longer data read timeout than
 	 * indicated in CSD.

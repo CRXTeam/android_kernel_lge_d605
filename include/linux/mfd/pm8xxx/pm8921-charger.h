@@ -56,17 +56,11 @@ enum pm8921_chg_led_src_config {
 	LED_SRC_BYPASS,
 };
 
-/*           
-                                    
-                                
-*/
-
 typedef enum{
 	IUSB_REDUCE_METHOD = 0,
 	IUSB_USE_FOR_ISYSTEM_METHOD,
 	IUSB_NORMAL_METHOD,
 } xo_mitigation_way;
-/*                               */
 
 /**
  * struct pm8921_charger_platform_data -
@@ -178,14 +172,8 @@ struct pm8921_charger_platform_data {
 	int				*thermal_mitigation;
 	int				thermal_levels;
 #ifdef CONFIG_LGE_CHARGER_TEMP_SCENARIO
-	/*           
-                                    
-                                
-*/
 	xo_mitigation_way thermal_mitigation_method;
-/*                               */
 #endif
-/*                                       */
 	enum pm8921_chg_cold_thr	cold_thr;
 	enum pm8921_chg_hot_thr		hot_thr;
 #ifdef CONFIG_MACH_LGE
@@ -197,10 +185,6 @@ struct pm8921_charger_platform_data {
 #ifdef CONFIG_MACH_MSM8930_FX3
 	bool				aicl;
 #endif
-#ifdef CONFIG_LGE_PM_BOOST_IC
-	unsigned int boost_byp_sw_gpio;
-	unsigned int boost_byp_thr;
-#endif /*                        */
 	int 			stop_chg_upon_expiry;
 };
 
@@ -214,14 +198,9 @@ enum pm8921_charger_source {
 void pm8921_charger_vbus_draw(unsigned int mA);
 int pm8921_charger_register_vbus_sn(void (*callback)(int));
 void pm8921_charger_unregister_vbus_sn(void (*callback)(int));
-/*                                                          */
 #ifdef CONFIG_LGE_PM
 extern int pm8921_charger_is_ta_connected(void);
-#ifdef CONFIG_LGE_PM_VZW_FAST_CHG
-extern void set_vzw_charging_state(void);
 #endif
-#endif
-/*                          */
 /**
  * pm8921_charger_enable -
  *

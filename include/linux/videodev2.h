@@ -1299,8 +1299,8 @@ enum v4l2_colorfx {
 #define V4L2_CID_SPECIAL_EFFECT			(V4L2_CID_BASE+43)
 /* Minimum number of buffer neede by the device */
 
-#define V4L2_CID_NIGHT_MODE			(V4L2_CID_BASE+44)  /*                                                                  */
-#define V4L2_CID_FPS_RANGE			(V4L2_CID_BASE+45)  /*                                                                 */
+#define V4L2_CID_NIGHT_MODE			(V4L2_CID_BASE+44)
+#define V4L2_CID_FPS_RANGE			(V4L2_CID_BASE+45)
 
 /*  MPEG-class control IDs defined by V4L2 */
 #define V4L2_CID_MPEG_BASE 			(V4L2_CTRL_CLASS_MPEG | 0x900)

@@ -78,9 +78,8 @@
 #ifdef CONFIG_X86_LOCAL_APIC
 #include <asm/smp.h>
 #endif
-/*                            */
 #include <mach/board_lge.h>
-/*                            */
+
 static int kernel_init(void *);
 
 extern void init_IRQ(void);
@@ -114,11 +113,9 @@ EXPORT_SYMBOL(system_state);
  */
 #define MAX_INIT_ARGS CONFIG_INIT_ENV_ARG_LIMIT
 #define MAX_INIT_ENVS CONFIG_INIT_ENV_ARG_LIMIT
-/*                                           */
 #ifdef CONFIG_LGE_PM
 static void smpl_count(void);
 #endif
-/*                                 */
 
 extern void time_init(void);
 /* Default late time init is NULL. archs can override this later. */
@@ -134,9 +131,8 @@ static char *static_command_line;
 
 static char *execute_command;
 static char *ramdisk_execute_command;
-/*                            */
 static char miniOS_command[] = "miniOS";
-/*                            */
+
 /*
  * If set, this is an indication to the drivers that reset the underlying
  * device before going ahead with the initialization otherwise driver might
@@ -395,7 +391,6 @@ static noinline void __init_refok rest_init(void)
 	cpu_idle();
 }
 
-/*                                           */
 #ifdef CONFIG_LGE_PM
 #define PWR_ON_EVENT_KEYPAD			0x1
 #define PWR_ON_EVENT_RTC			0x2
@@ -420,20 +415,17 @@ static void write_file(char *filename, char* data)
 
 	fd = sys_open((const char __user *)filename, O_WRONLY | O_CREAT, 0644);
 	printk("[SMPL_CNT] ===> write() : fd is %d\n", fd);
-	if(fd >=0)
-	{
+	if(fd >=0) {
 		file = fget(fd);
-		if(file)
-		{
+		if(file) {
 			vfs_write(file, data, strlen(data), &pos);
 			fput(file);
 		}
 		sys_close(fd);
-	}
-	else
-	{
+	} else {
 		printk("[SMPL_CNT] === > write : sys_open error!!!!\n");
 	}
+
 	set_fs(old_fs);
 }
 
@@ -478,19 +470,16 @@ static void smpl_count(void)
 
 	printk("[BOOT_CAUSE] %s \n", buf);
 
-	if(boot_cause==PWR_ON_EVENT_SMPL)
-	{
+	if(boot_cause==PWR_ON_EVENT_SMPL) {
 		printk("[SMPL_CNT] ===> is smpl boot\n");
 		write_file(file_name, "1");
-	}
-	else
-	{
+	} else {
 		write_file(file_name, "0");
 		printk("[SMPL_CNT] ===> not smpl boot!!!!!\n");
 	}
 }
 #endif
-/*                                 */
+
 /* Check for early params. */
 static int __init do_early_param(char *param, char *val)
 {
@@ -900,13 +889,10 @@ static void run_init_process(const char *init_filename)
 {
 	argv_init[0] = init_filename;
 
-	/*                            */
-	if(lge_get_boot_mode() == LGE_BOOT_MODE_MINIOS)
-	{
+	if(lge_get_boot_mode() == LGE_BOOT_MODE_MINIOS) {
 		printk(KERN_WARNING "BOOT MODE %s\n", miniOS_command);
 		argv_init[1] = miniOS_command;
 	}
-	/*                            */
 
 	kernel_execve(init_filename, argv_init, envp_init);
 }
@@ -1004,11 +990,10 @@ static int __init kernel_init(void * unused)
 	 * initmem segments and start the user-mode stuff..
 	 */
 
-/*                                           */
 #ifdef CONFIG_LGE_PM
 	smpl_count();
 #endif
-/*                                  */
+
 	init_post();
 	return 0;
 }

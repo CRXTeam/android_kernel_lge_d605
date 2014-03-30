@@ -24,11 +24,6 @@
 /* Fixed constants first: */
 #undef NR_OPEN
 #ifdef CONFIG_MACH_LGE
-/*                                          
-                                                            
-                              
-                                  
- */
 #define INR_OPEN_CUR 2048	/* Initial setting for nfile rlimits */
 #else
 #define INR_OPEN_CUR 1024	/* Initial setting for nfile rlimits */

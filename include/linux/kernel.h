@@ -355,10 +355,6 @@ extern void set_crash_store_disable(void);
 extern void store_crash_log(char* p);
 extern void lge_set_kernel_crash_magic(void);
 #ifdef CONFIG_CPU_CP15_MMU
-/*            
-                                                                  
-                                 
- */
 extern void lge_save_ctx(struct pt_regs*,unsigned int, unsigned int, unsigned int);
 #endif
 #endif

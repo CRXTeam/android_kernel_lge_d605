@@ -105,7 +105,6 @@
 #include <linux/sockios.h>
 #include <linux/atalk.h>
 
-
 #ifdef CONFIG_UID_STAT	//LG_DATA_CTS_TRAFFIC_STATS_FOR_LOCALHOST  
 #include <linux/uid_stat.h>
 #endif

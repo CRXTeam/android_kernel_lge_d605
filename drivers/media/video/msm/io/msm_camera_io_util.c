@@ -312,9 +312,7 @@ int msm_camera_enable_vreg(struct device *dev, struct camera_vreg_t *cam_vreg,
 					__func__, cam_vreg[j].reg_name);
 				goto disable_vreg;
 			}
-#ifndef CONFIG_HI543 /*                                                                 */
-			usleep_range(1000,2000); /*     */
-#endif
+			usleep_range(1000,2000);
 			if (cam_vreg[j].delay > 20)
 				msleep(cam_vreg[j].delay);
 			else if (cam_vreg[j].delay)

@@ -191,14 +191,8 @@ int videobuf2_pmem_contig_user_get(struct videobuf2_contig_pmem *mem,
 		pr_err("%s ION import failed\n", __func__);
 		return PTR_ERR(mem->ion_handle);
 	}
-#if defined(CONFIG_MACH_APQ8064_GK_KR) || defined(CONFIG_MACH_APQ8064_GKATT) || defined (CONFIG_MACH_APQ8064_GVDCM)
-	//use delayed unmapping.. because iommu fault is occured...
-	rc = ion_map_iommu(client, mem->ion_handle, domain_num, 0,
-		SZ_4K, 0, (unsigned long *)&mem->phyaddr, &len, UNCACHED, ION_IOMMU_UNMAP_DELAYED);
-#else
 	rc = ion_map_iommu(client, mem->ion_handle, domain_num, 0,
 		SZ_4K, 0, (unsigned long *)&mem->phyaddr, &len, UNCACHED, 0);
-#endif
 	if (rc < 0)
 		ion_free(client, mem->ion_handle);
 #elif CONFIG_ANDROID_PMEM
@@ -226,21 +220,13 @@ int videobuf2_pmem_contig_user_get(struct videobuf2_contig_pmem *mem,
 }
 EXPORT_SYMBOL_GPL(videobuf2_pmem_contig_user_get);
 
-#if defined(CONFIG_MACH_APQ8064_GK_KR) || defined(CONFIG_MACH_APQ8064_GKATT) || defined (CONFIG_MACH_APQ8064_GVDCM)
-void videobuf2_pmem_contig_user_put(struct videobuf2_contig_pmem *mem,
-				struct ion_client *client, int domain_num, int is_closing)
-#else
 void videobuf2_pmem_contig_user_put(struct videobuf2_contig_pmem *mem,
 				struct ion_client *client, int domain_num)
-#endif
 {
 	if (mem->is_userptr) {
 #ifdef CONFIG_MSM_MULTIMEDIA_USE_ION
 		ion_unmap_iommu(client, mem->ion_handle,
 				domain_num, 0);
-#if defined(CONFIG_MACH_APQ8064_GK_KR) || defined(CONFIG_MACH_APQ8064_GKATT) || defined (CONFIG_MACH_APQ8064_GVDCM)
-		if (is_closing != 1)
-#endif
 		ion_free(client, mem->ion_handle);
 #elif CONFIG_ANDROID_PMEM
 		put_pmem_file(mem->file);

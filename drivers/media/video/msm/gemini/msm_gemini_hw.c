@@ -402,8 +402,6 @@ void msm_gemini_hw_write(struct msm_gemini_hw_cmd *hw_cmd_p)
 	writel(new_data, paddr);
 }
 
-/*                                                                         */
-#if (1)
 void msm_gemini_io_w(uint32_t offset, uint32_t val)
 {
 	uint32_t *paddr = gemini_region_base + offset;
@@ -415,8 +413,6 @@ uint32_t msm_gemini_io_r(uint32_t offset)
 	uint32_t *paddr = gemini_region_base + offset;
 	return readl(paddr);
 }
-#endif
-/*                                                                         */
 
 int msm_gemini_hw_wait(struct msm_gemini_hw_cmd *hw_cmd_p, int m_us)
 {

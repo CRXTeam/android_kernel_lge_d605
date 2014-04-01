@@ -14,15 +14,9 @@
 #include "msm_sensor.h"
 #include "msm.h"
 #include "msm_sensor_bayer.h"
-/*                                                                                       */
-// #include "imx091.h"
-/*                                                                                       */
 
 static struct i2c_driver *sensor_i2c_driver[] = {
 	/* back camera */
-/*                                                                                       */
-//	&imx091_i2c_driver,
-/*                                                                                       */
 	/* front camera */
 };
 

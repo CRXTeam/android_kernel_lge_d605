@@ -88,8 +88,8 @@ struct msm_sensor_reg_t {
 	enum msm_camera_i2c_data_type default_data_type;
 	struct msm_camera_i2c_reg_conf *start_stream_conf;
 	uint8_t start_stream_conf_size;
-	struct msm_camera_i2c_reg_conf *entrance_start_stream_conf;	/*                                                                                              */
-	uint8_t entrance_start_stream_conf_size;					/*                                                                                              */
+	struct msm_camera_i2c_reg_conf *entrance_start_stream_conf;
+	uint8_t entrance_start_stream_conf_size;
 	struct msm_camera_i2c_reg_conf *stop_stream_conf;
 	uint8_t stop_stream_conf_size;
 	struct msm_camera_i2c_reg_conf *group_hold_on_conf;
@@ -162,9 +162,7 @@ struct msm_sensor_fn_t {
 	void (*sensor_adjust_frame_lines) (struct msm_sensor_ctrl_t *s_ctrl);
 	int32_t (*sensor_get_csi_params)(struct msm_sensor_ctrl_t *,
 		struct csi_lane_params_t *);
-	/*                                                                   */
 	int8_t (*sensor_set_aec_roi) (struct msm_sensor_ctrl_t *, int32_t);
-/*                                                                   */	
 	int8_t (*sensor_set_soc_awb_lock) (struct msm_sensor_ctrl_t *, int32_t); /*                                                                         */
 	int8_t (*sensor_set_soc_aec_lock) (struct msm_sensor_ctrl_t *, int32_t); /*                                                                         */
 	int8_t (*sensor_get_soc_snapshotdata) (struct msm_sensor_ctrl_t *, struct snapshot_soc_data_cfg *); /*                                                                        */
@@ -201,8 +199,8 @@ struct msm_sensor_ctrl_t {
 	struct msm_sensor_output_reg_addr_t *sensor_output_reg_addr;
 	struct msm_sensor_id_info_t *sensor_id_info;
 	struct msm_sensor_exp_gain_info_t *sensor_exp_gain_info;
-	uint8_t hi543Initcheck;		/*                                                                                                */
-	uint8_t hi707Initcheck;		/*                                                                                                      */
+	uint8_t hi543Initcheck;
+	uint8_t hi707Initcheck;
 	struct msm_sensor_reg_t *msm_sensor_reg;
 	struct msm_sensor_v4l2_ctrl_info_t *msm_sensor_v4l2_ctrl_info;
 	uint16_t num_v4l2_ctrl;

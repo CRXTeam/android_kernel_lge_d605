@@ -715,7 +715,6 @@ static struct fs_driver_data mdp_fs_data_8930 = {
 		{ .name = "bus_clk" },
 		{ .name = "vsync_clk" },
 		{ .name = "lut_clk" },
-/*            */
 #ifdef CONFIG_FB_MSM_HDMI_MSM_PANEL
 		{ .name = "tv_src_clk" },
 		{ .name = "tv_clk" },
@@ -1145,7 +1144,7 @@ struct msm_vidc_platform_data apq8930_vidc_platform_data = {
 	.disable_fullhd = 0,
 	.cont_mode_dpb_count = 18,
 	.fw_addr = 0x9fe00000,
-	.vote_high_bw = 1,  /*                                                                                                       */
+	.vote_high_bw = 1,
 };
 
 struct platform_device apq8930_msm_device_vidc = {

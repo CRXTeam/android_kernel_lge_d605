@@ -1002,7 +1002,7 @@ static struct branch_clk gfx3d_p_clk = {
 	},
 };
 
-#ifdef CONFIG_FB_MSM_HDMI_MSM_PANEL /*     */
+#ifdef CONFIG_FB_MSM_HDMI_MSM_PANEL
 static struct branch_clk hdmi_m_p_clk = {
 	.b = {
 		.ctl_reg = AHB_EN_REG,
@@ -4001,8 +4001,8 @@ static struct rcg_clk rot_clk = {
 	},
 };
 
-#ifdef CONFIG_FB_MSM_HDMI_MSM_PANEL /*     */
-static int hdmi_pll_clk_enable(struct clk *clk)
+#ifdef CONFIG_FB_MSM_HDMI_MSM_PANEL
+static int hdmi_pll_clk_enable(struct clk *c)
 {
 	int ret;
 	unsigned long flags;
@@ -4902,7 +4902,7 @@ static struct measure_sel measure_mux[] = {
 	{ TEST_MM_LS(0x0C), &gfx2d0_p_clk.c },
 	{ TEST_MM_LS(0x0D), &gfx2d1_p_clk.c },
 	{ TEST_MM_LS(0x0E), &gfx3d_p_clk.c },
-#ifdef CONFIG_FB_MSM_HDMI_MSM_PANEL /*     */
+#ifdef CONFIG_FB_MSM_HDMI_MSM_PANEL
 	{ TEST_MM_LS(0x0F), &hdmi_m_p_clk.c },
 	{ TEST_MM_LS(0x10), &hdmi_s_p_clk.c },
 #endif
@@ -4918,11 +4918,11 @@ static struct measure_sel measure_mux[] = {
 	{ TEST_MM_LS(0x1B), &vfe_p_clk.c },
 	{ TEST_MM_LS(0x1C), &vpe_p_clk.c },
 	{ TEST_MM_LS(0x1D), &cam0_clk.c },
-#ifdef CONFIG_FB_MSM_HDMI_MSM_PANEL /*     */
+#ifdef CONFIG_FB_MSM_HDMI_MSM_PANEL
 	{ TEST_MM_LS(0x1F), &hdmi_app_clk.c },
 #endif
 	{ TEST_MM_LS(0x20), &mdp_vsync_clk.c },
-#ifdef CONFIG_FB_MSM_HDMI_MSM_PANEL /*     */
+#ifdef CONFIG_FB_MSM_HDMI_MSM_PANEL
 	{ TEST_MM_LS(0x21), &tv_dac_clk.c },
 	{ TEST_MM_LS(0x22), &tv_enc_clk.c },
 #endif
@@ -4957,7 +4957,7 @@ static struct measure_sel measure_mux[] = {
 	{ TEST_MM_HS(0x1A), &mdp_clk.c },
 	{ TEST_MM_HS(0x1B), &rot_clk.c },
 	{ TEST_MM_HS(0x1C), &vpe_clk.c },
-#ifdef CONFIG_FB_MSM_HDMI_MSM_PANEL /*     */
+#ifdef CONFIG_FB_MSM_HDMI_MSM_PANEL
 	{ TEST_MM_HS(0x1E), &hdmi_tv_clk.c },
 	{ TEST_MM_HS(0x1F), &mdp_tv_clk.c },
 #endif
@@ -4980,7 +4980,7 @@ static struct measure_sel measure_mux[] = {
 	{ TEST_MM_HS(0x34), &vcap_npl_clk.c },
 	{ TEST_MM_HS(0x34), &gfx3d_axi_clk_8930.c },
 	{ TEST_MM_HS(0x35), &vcap_axi_clk.c },
-#ifdef CONFIG_FB_MSM_HDMI_MSM_PANEL /*     */
+#ifdef CONFIG_FB_MSM_HDMI_MSM_PANEL
 	{ TEST_MM_HS(0x36), &rgb_tv_clk.c },
 	{ TEST_MM_HS(0x37), &npl_tv_clk.c },
 #endif
@@ -5259,7 +5259,7 @@ static struct clk_lookup msm_clocks_8064[] = {
 	CLK_LOOKUP("core_clk",		gsbi6_uart_clk.c, "msm_serial_hs.0"),
 	CLK_LOOKUP("core_clk",		gsbi7_uart_clk.c, "msm_serial_hsl.0"),
 	CLK_LOOKUP("core_clk",		gsbi1_qup_clk.c,	"qup_i2c.0"),
-	CLK_LOOKUP("core_clk",		gsbi2_qup_clk.c,	"qup_i2c.2"), /*     */
+	CLK_LOOKUP("core_clk",		gsbi2_qup_clk.c,	"qup_i2c.2"),
 	CLK_LOOKUP("core_clk",		gsbi3_qup_clk.c,	"qup_i2c.3"),
 	CLK_LOOKUP("core_clk",		gsbi4_qup_clk.c,	"qup_i2c.4"),
 	CLK_LOOKUP("core_clk",		gsbi5_qup_clk.c,	"spi_qsd.0"),
@@ -5301,7 +5301,7 @@ static struct clk_lookup msm_clocks_8064[] = {
 	CLK_LOOKUP("dma_bam_pclk",	dma_bam_p_clk.c,	NULL),
 	CLK_LOOKUP("iface_clk",		gsbi1_p_clk.c,	"msm_serial_hsl.1"),
 	CLK_LOOKUP("iface_clk",		gsbi1_p_clk.c,	"qup_i2c.0"),
-	CLK_LOOKUP("iface_clk",		gsbi2_p_clk.c,		"qup_i2c.2"), /*     */
+	CLK_LOOKUP("iface_clk",		gsbi2_p_clk.c,		"qup_i2c.2"),
 	CLK_LOOKUP("iface_clk",		gsbi3_p_clk.c,		"qup_i2c.3"),
 	CLK_LOOKUP("iface_clk",		gsbi4_p_clk.c,		"qup_i2c.4"),
 	CLK_LOOKUP("iface_clk",		gsbi5_p_clk.c,		"spi_qsd.0"),
@@ -5327,28 +5327,18 @@ static struct clk_lookup msm_clocks_8064[] = {
 	CLK_LOOKUP("iface_clk",		pmic_arb1_p_clk.c,	""),
 	CLK_LOOKUP("core_clk",		pmic_ssbi2_clk.c,	""),
 	CLK_LOOKUP("mem_clk",		rpm_msg_ram_p_clk.c,	""),
-	/*                                                                        */
-	#if defined (CONFIG_S5K4E5YA)
-	CLK_LOOKUP("cam_clk",		cam0_clk.c,	"4-0020"),
-	#elif defined (CONFIG_HI543)
-	CLK_LOOKUP("cam_clk",		cam0_clk.c, "4-0040"),
-	#elif defined (CONFIG_IMX111)
+#if defined (CONFIG_IMX111)
 	CLK_LOOKUP("cam_clk",		cam0_clk.c, "4-000d"),
-	#endif
-	
-	#if defined (CONFIG_HI707)
-	CLK_LOOKUP("cam_clk",		cam1_clk.c, "4-0060"),
-	#elif defined (CONFIG_IMX119)
+#endif
+#if defined (CONFIG_IMX119)
 	CLK_LOOKUP("cam_clk",		cam1_clk.c, "4-006e"),
-	#endif
-	
-	#if 0 /* Qualcomm Original */
+#endif
+#if 0 /* Qualcomm Original */
 	CLK_LOOKUP("cam_clk",		cam0_clk.c,	"4-001a"),
 	CLK_LOOKUP("cam_clk",		cam0_clk.c,	"4-0034"),
 	CLK_LOOKUP("cam_clk",		cam1_clk.c,	"4-0048"),
 	CLK_LOOKUP("cam_clk",		cam1_clk.c,	"4-006c"),
-	#endif
-	/*                                                                        */
+#endif
 	CLK_LOOKUP("csi_src_clk",	csi0_src_clk.c,		"msm_csid.0"),
 	CLK_LOOKUP("csi_src_clk",	csi1_src_clk.c,		"msm_csid.1"),
 	CLK_LOOKUP("csi_src_clk",	csi2_src_clk.c,		"msm_csid.2"),
@@ -5376,7 +5366,7 @@ static struct clk_lookup msm_clocks_8064[] = {
 	CLK_LOOKUP("byte_clk",	dsi2_byte_clk.c,	"mipi_dsi.2"),
 	CLK_LOOKUP("esc_clk",	dsi1_esc_clk.c,		"mipi_dsi.1"),
 	CLK_LOOKUP("esc_clk",	dsi2_esc_clk.c,		"mipi_dsi.2"),
-#ifdef CONFIG_FB_MSM_HDMI_MSM_PANEL /*     */
+#ifdef CONFIG_FB_MSM_HDMI_MSM_PANEL
 	CLK_LOOKUP("rgb_clk",		rgb_tv_clk.c,		""),
 	CLK_LOOKUP("npl_clk",		npl_tv_clk.c,		""),
 #endif
@@ -5406,14 +5396,14 @@ static struct clk_lookup msm_clocks_8064[] = {
 	CLK_LOOKUP("lut_clk",		lut_mdp_clk.c,	"footswitch-8x60.4"),
 	CLK_LOOKUP("core_clk",		rot_clk.c,	"msm_rotator.0"),
 	CLK_LOOKUP("core_clk",		rot_clk.c,	"footswitch-8x60.6"),
-#ifdef CONFIG_FB_MSM_HDMI_MSM_PANEL /*     */
+#ifdef CONFIG_FB_MSM_HDMI_MSM_PANEL
 	CLK_LOOKUP("tv_src_clk",	tv_src_clk.c,	"footswitch-8x60.4"),
 	CLK_LOOKUP("src_clk",	tv_src_clk.c,		"dtv.0"),
 	CLK_LOOKUP("div_clk",	tv_src_div_clk.c,	""),
 #endif
 	CLK_LOOKUP("core_clk",		vcodec_clk.c,		"msm_vidc.0"),
 	CLK_LOOKUP("core_clk",		vcodec_clk.c,	"footswitch-8x60.7"),
-#ifdef CONFIG_FB_MSM_HDMI_MSM_PANEL /*     */
+#ifdef CONFIG_FB_MSM_HDMI_MSM_PANEL
 	CLK_LOOKUP("mdp_clk",	mdp_tv_clk.c,		"dtv.0"),
 	CLK_LOOKUP("tv_clk",		mdp_tv_clk.c,	"footswitch-8x60.4"),
 	CLK_LOOKUP("hdmi_clk",		hdmi_tv_clk.c,		"dtv.0"),
@@ -5442,7 +5432,7 @@ static struct clk_lookup msm_clocks_8064[] = {
 	CLK_LOOKUP("slave_iface_clk",	dsi2_s_p_clk.c,		"mipi_dsi.2"),
 	CLK_LOOKUP("iface_clk",		gfx3d_p_clk.c,	"kgsl-3d0.0"),
 	CLK_LOOKUP("iface_clk",		gfx3d_p_clk.c,	"footswitch-8x60.2"),
-#ifdef CONFIG_FB_MSM_HDMI_MSM_PANEL /*     */
+#ifdef CONFIG_FB_MSM_HDMI_MSM_PANEL
 	CLK_LOOKUP("master_iface_clk",	hdmi_m_p_clk.c,		"hdmi_msm.1"),
 	CLK_LOOKUP("slave_iface_clk",	hdmi_s_p_clk.c,		"hdmi_msm.1"),
 #endif
@@ -5631,14 +5621,14 @@ static struct clk_lookup msm_clocks_8960_common[] __initdata = {
 	CLK_LOOKUP("core_clk",		gsbi11_uart_clk.c,	""),
 	CLK_LOOKUP("core_clk",		gsbi12_uart_clk.c,	""),
 	CLK_LOOKUP("core_clk",		gsbi1_qup_clk.c,	"spi_qsd.0"),
-	CLK_LOOKUP("core_clk",		gsbi2_qup_clk.c,	"qup_i2c.2"), /*     */
+	CLK_LOOKUP("core_clk",		gsbi2_qup_clk.c,	"qup_i2c.2"),
 	CLK_LOOKUP("core_clk",		gsbi3_qup_clk.c,	"qup_i2c.3"),
 	CLK_LOOKUP("core_clk",		gsbi4_qup_clk.c,	"qup_i2c.4"),
 	CLK_LOOKUP("core_clk",		gsbi5_qup_clk.c,	""),
 	CLK_LOOKUP("core_clk",		gsbi6_qup_clk.c,	""),
 	CLK_LOOKUP("core_clk",		gsbi7_qup_clk.c,	""),
 	CLK_LOOKUP("core_clk",		gsbi8_qup_clk.c,	""),
-	CLK_LOOKUP("core_clk",		gsbi9_qup_clk.c,	"qup_i2c.0"), /*     */
+	CLK_LOOKUP("core_clk",		gsbi9_qup_clk.c,	"qup_i2c.0"),
 	CLK_LOOKUP("core_clk",		gsbi10_qup_clk.c,	"qup_i2c.10"),
 	CLK_LOOKUP("core_clk",		gsbi11_qup_clk.c,	""),
 	CLK_LOOKUP("core_clk",		gsbi12_qup_clk.c,	"qup_i2c.12"),
@@ -5671,7 +5661,7 @@ static struct clk_lookup msm_clocks_8960_common[] __initdata = {
 	CLK_LOOKUP("core_clk",		ce1_core_clk.c,		"qcrypto.0"),
 	CLK_LOOKUP("dma_bam_pclk",	dma_bam_p_clk.c,	NULL),
 	CLK_LOOKUP("iface_clk",		gsbi1_p_clk.c,		"spi_qsd.0"),
-	CLK_LOOKUP("iface_clk",		gsbi2_p_clk.c,		"qup_i2c.2"), /*     */
+	CLK_LOOKUP("iface_clk",		gsbi2_p_clk.c,		"qup_i2c.2"),
 	CLK_LOOKUP("iface_clk",		gsbi3_p_clk.c,		"qup_i2c.3"),
 	CLK_LOOKUP("iface_clk",		gsbi4_p_clk.c,		"qup_i2c.4"),
 	CLK_LOOKUP("iface_clk",		gsbi5_p_clk.c,	"msm_serial_hsl.0"),
@@ -5702,22 +5692,13 @@ static struct clk_lookup msm_clocks_8960_common[] __initdata = {
 	CLK_LOOKUP("iface_clk",		pmic_arb1_p_clk.c,	""),
 	CLK_LOOKUP("core_clk",		pmic_ssbi2_clk.c,	""),
 	CLK_LOOKUP("mem_clk",		rpm_msg_ram_p_clk.c,	""),
-	/*                                                                        */
-	#if defined (CONFIG_S5K4E5YA)
-	CLK_LOOKUP("cam_clk",		cam0_clk.c,	"4-0020"),
-	#elif defined (CONFIG_HI543)
-	CLK_LOOKUP("cam_clk",		cam0_clk.c, "4-0040"),
-	#elif defined (CONFIG_IMX111)
+#if defined (CONFIG_IMX111)
 	CLK_LOOKUP("cam_clk",		cam0_clk.c, "4-000d"),
-	#endif 
-	
-	#if defined (CONFIG_HI707)
-	CLK_LOOKUP("cam_clk",		cam1_clk.c, "4-0060"),
-	#elif defined (CONFIG_IMX119)
+#endif 
+#if defined (CONFIG_IMX119)
 	CLK_LOOKUP("cam_clk",		cam1_clk.c, "4-006e"),
-	#endif
-	
-	#if 0 /* Qualcomm Original */
+#endif
+#if 0 /* Qualcomm Original */
 	CLK_LOOKUP("cam_clk",		cam0_clk.c,	"4-001a"),
 	CLK_LOOKUP("cam_clk",		cam0_clk.c,	"4-006c"),
 	CLK_LOOKUP("cam_clk",		cam0_clk.c,	"4-0048"),
@@ -5725,8 +5706,7 @@ static struct clk_lookup msm_clocks_8960_common[] __initdata = {
 	CLK_LOOKUP("cam_clk",		cam0_clk.c,	"4-0034"),
 	CLK_LOOKUP("cam_clk",		cam0_clk.c,	"4-0036"),
 	CLK_LOOKUP("cam_clk",		cam0_clk.c,	"4-0010"),
-	#endif
-    /*                                                                        */
+#endif
 	CLK_LOOKUP("csi_src_clk",	csi0_src_clk.c,		"msm_csid.0"),
 	CLK_LOOKUP("csi_src_clk",	csi1_src_clk.c,		"msm_csid.1"),
 	CLK_LOOKUP("csi_src_clk",	csi2_src_clk.c,		"msm_csid.2"),
@@ -5774,7 +5754,7 @@ static struct clk_lookup msm_clocks_8960_common[] __initdata = {
 	CLK_LOOKUP("lut_clk",		lut_mdp_clk.c,	"footswitch-8x60.4"),
 	CLK_LOOKUP("core_clk",		rot_clk.c,	"msm_rotator.0"),
 	CLK_LOOKUP("core_clk",		rot_clk.c,	"footswitch-8x60.6"),
-#ifdef CONFIG_FB_MSM_HDMI_MSM_PANEL /*     */
+#ifdef CONFIG_FB_MSM_HDMI_MSM_PANEL
 	CLK_LOOKUP("src_clk",	tv_src_clk.c,		"dtv.0"),
 	CLK_LOOKUP("src_clk",	tv_src_clk.c,		"tvenc.0"),
 	CLK_LOOKUP("tv_src_clk",	tv_src_clk.c,	"footswitch-8x60.4"),
@@ -5783,7 +5763,7 @@ static struct clk_lookup msm_clocks_8960_common[] __initdata = {
 #endif
 	CLK_LOOKUP("core_clk",		vcodec_clk.c,	"msm_vidc.0"),
 	CLK_LOOKUP("core_clk",		vcodec_clk.c,	"footswitch-8x60.7"),
-#ifdef CONFIG_FB_MSM_HDMI_MSM_PANEL /*     */
+#ifdef CONFIG_FB_MSM_HDMI_MSM_PANEL
 	CLK_LOOKUP("mdp_clk",	mdp_tv_clk.c,		"dtv.0"),
 	CLK_LOOKUP("mdp_clk",	mdp_tv_clk.c,		"tvenc.0"),
 	CLK_LOOKUP("tv_clk",		mdp_tv_clk.c,	"footswitch-8x60.4"),
@@ -5813,7 +5793,7 @@ static struct clk_lookup msm_clocks_8960_common[] __initdata = {
 	CLK_LOOKUP("slave_iface_clk",	dsi2_s_p_clk.c,		"mipi_dsi.2"),
 	CLK_LOOKUP("iface_clk",		gfx3d_p_clk.c,	"kgsl-3d0.0"),
 	CLK_LOOKUP("iface_clk",		gfx3d_p_clk.c,	"footswitch-8x60.2"),
-#ifdef CONFIG_FB_MSM_HDMI_MSM_PANEL /*     */
+#ifdef CONFIG_FB_MSM_HDMI_MSM_PANEL
 	CLK_LOOKUP("master_iface_clk",	hdmi_m_p_clk.c,	"hdmi_msm.1"),
 	CLK_LOOKUP("slave_iface_clk",	hdmi_s_p_clk.c,	"hdmi_msm.1"),
 #endif
@@ -5902,7 +5882,7 @@ static struct clk_lookup msm_clocks_8960_common[] __initdata = {
 };
 
 static struct clk_lookup msm_clocks_8960_only[] __initdata = {
-#ifdef CONFIG_FB_MSM_HDMI_MSM_PANEL /*     */
+#ifdef CONFIG_FB_MSM_HDMI_MSM_PANEL
 	CLK_LOOKUP("enc_clk",	tv_enc_clk.c,		"tvenc.0"),
 	CLK_LOOKUP("dac_clk",	tv_dac_clk.c,		"tvenc.0"),
 #endif	
@@ -5923,7 +5903,7 @@ static struct clk_lookup msm_clocks_8960_only[] __initdata = {
 static struct clk_lookup msm_clocks_8960ab_only[] __initdata = {
 	CLK_LOOKUP("bus_clk", gfx3d_axi_clk.c, "footswitch-8x60.2"),
 	CLK_LOOKUP("core_clk", gfx3d_axi_clk.c, "msm_iommu.10"),
-#ifdef CONFIG_FB_MSM_HDMI_MSM_PANEL /*     */	
+#ifdef CONFIG_FB_MSM_HDMI_MSM_PANEL	
 	CLK_LOOKUP("div_clk",	tv_src_div_clk.c,	""),
 #endif	
 };
@@ -6001,20 +5981,17 @@ static struct clk_lookup msm_clocks_8930[] = {
 	CLK_LOOKUP("core_clk",		gsbi5_uart_clk.c, "msm_serial_hsl.0"),
 	CLK_LOOKUP("core_clk",		gsbi6_uart_clk.c, "msm_serial_hs.0"),
 	CLK_LOOKUP("core_clk",		gsbi7_uart_clk.c,	""),
-//                                                                       
-#ifdef CONFIG_LGE_IRRC  // GSPAPA_IRRC
-// gspapa.kim gpio change, gpio_35,36 -> gpio_35,34
-	CLK_LOOKUP("core_clk",		gsbi8_uart_clk.c, "msm_serial_hsl.1"), // GSPAPA_IIRC
+#ifdef CONFIG_LGE_IRRC
+	CLK_LOOKUP("core_clk",		gsbi8_uart_clk.c, "msm_serial_hsl.1"),
 #else
 	CLK_LOOKUP("core_clk",		gsbi8_uart_clk.c,	""),
 #endif
-//                                                                       
 	CLK_LOOKUP("core_clk",		gsbi9_uart_clk.c,	""),
 	CLK_LOOKUP("core_clk",		gsbi10_uart_clk.c,	""),
 	CLK_LOOKUP("core_clk",		gsbi11_uart_clk.c,	""),
 	CLK_LOOKUP("core_clk",		gsbi12_uart_clk.c,	""),
 	CLK_LOOKUP("core_clk",		gsbi1_qup_clk.c,	"spi_qsd.0"),
-	CLK_LOOKUP("core_clk",		gsbi2_qup_clk.c,	"qup_i2c.2"), /*     */
+	CLK_LOOKUP("core_clk",		gsbi2_qup_clk.c,	"qup_i2c.2"),
 	CLK_LOOKUP("core_clk",		gsbi3_qup_clk.c,	"qup_i2c.3"),
 	CLK_LOOKUP("core_clk",		gsbi4_qup_clk.c,	"qup_i2c.4"),
 	CLK_LOOKUP("core_clk",		gsbi5_qup_clk.c,	""),
@@ -6054,15 +6031,14 @@ static struct clk_lookup msm_clocks_8930[] = {
 	CLK_LOOKUP("core_clk",		ce1_core_clk.c,		"qcrypto.0"),
 	CLK_LOOKUP("dma_bam_pclk",	dma_bam_p_clk.c,	NULL),
 	CLK_LOOKUP("iface_clk",		gsbi1_p_clk.c,		"spi_qsd.0"),
-	CLK_LOOKUP("iface_clk",		gsbi2_p_clk.c,		"qup_i2c.2"), /*     */
+	CLK_LOOKUP("iface_clk",		gsbi2_p_clk.c,		"qup_i2c.2"),
 	CLK_LOOKUP("iface_clk",		gsbi3_p_clk.c,		"qup_i2c.3"),
 	CLK_LOOKUP("iface_clk",		gsbi4_p_clk.c,		"qup_i2c.4"),
 	CLK_LOOKUP("iface_clk",		gsbi5_p_clk.c,	"msm_serial_hsl.0"),
 	CLK_LOOKUP("iface_clk",		gsbi6_p_clk.c,  "msm_serial_hs.0"),
 	CLK_LOOKUP("iface_clk",		gsbi7_p_clk.c,		""),
-#ifdef CONFIG_LGE_IRRC  // GSPAPA_IRRC
-// gspapa.kim gpio change, gpio_35,36 -> gpio_35,34
-	CLK_LOOKUP("iface_clk",     gsbi8_p_clk.c,		"msm_serial_hsl.1"), /*                   */
+#ifdef CONFIG_LGE_IRRC
+	CLK_LOOKUP("iface_clk",     gsbi8_p_clk.c,		"msm_serial_hsl.1"),
 #else
 	CLK_LOOKUP("iface_clk",		gsbi8_p_clk.c,		""),
 #endif
@@ -6085,28 +6061,18 @@ static struct clk_lookup msm_clocks_8930[] = {
 	CLK_LOOKUP("iface_clk",		pmic_arb1_p_clk.c,	""),
 	CLK_LOOKUP("core_clk",		pmic_ssbi2_clk.c,	""),
 	CLK_LOOKUP("mem_clk",		rpm_msg_ram_p_clk.c,	""),
-	/*                                                                        */
-	#if defined (CONFIG_S5K4E5YA)
-	CLK_LOOKUP("cam_clk",		cam0_clk.c,	"4-0020"),
-	#elif defined (CONFIG_HI543)
-	CLK_LOOKUP("cam_clk",		cam0_clk.c, "4-0040"),
-	#elif defined (CONFIG_IMX111)
+#if defined (CONFIG_IMX111)
 	CLK_LOOKUP("cam_clk",		cam0_clk.c, "4-000d"),
-	#endif
-	
-	#if defined (CONFIG_HI707)
-	CLK_LOOKUP("cam_clk",		cam1_clk.c, "4-0060"),
-	#elif defined (CONFIG_IMX119)
+#endif
+#if defined (CONFIG_IMX119)
 	CLK_LOOKUP("cam_clk",		cam1_clk.c, "4-006e"),
-	#endif
-	
-	#if 0 /* Qualcomm Original */
+#endif
+#if 0 /* Qualcomm Original */
 	CLK_LOOKUP("cam_clk",		cam0_clk.c,	"4-001a"),
 	CLK_LOOKUP("cam_clk",		cam1_clk.c,	"4-006c"),
 	CLK_LOOKUP("cam_clk",		cam1_clk.c,	"4-0048"),
 	CLK_LOOKUP("cam_clk",		cam2_clk.c,		NULL),
-	#endif
-	/*                                                                        */
+#endif
 	CLK_LOOKUP("csi_src_clk",	csi0_src_clk.c,		"msm_csid.0"),
 	CLK_LOOKUP("csi_src_clk",	csi1_src_clk.c,		"msm_csid.1"),
 	CLK_LOOKUP("csi_src_clk",	csi2_src_clk.c,		"msm_csid.2"),
@@ -6152,7 +6118,7 @@ static struct clk_lookup msm_clocks_8930[] = {
 	CLK_LOOKUP("lut_clk",		lut_mdp_clk.c,	"footswitch-8x60.4"),
 	CLK_LOOKUP("core_clk",		rot_clk.c,	"msm_rotator.0"),
 	CLK_LOOKUP("core_clk",		rot_clk.c,	"footswitch-8x60.6"),
-#ifdef CONFIG_FB_MSM_HDMI_MSM_PANEL /*     */
+#ifdef CONFIG_FB_MSM_HDMI_MSM_PANEL
 	CLK_LOOKUP("src_clk",	tv_src_clk.c,		"dtv.0"),
 	CLK_LOOKUP("src_clk",	tv_src_clk.c,		"tvenc.0"),
 	CLK_LOOKUP("tv_src_clk",	tv_src_clk.c,	"footswitch-8x60.4"),
@@ -6160,7 +6126,7 @@ static struct clk_lookup msm_clocks_8930[] = {
 #endif
 	CLK_LOOKUP("core_clk",		vcodec_clk.c,	"msm_vidc.0"),
 	CLK_LOOKUP("core_clk",		vcodec_clk.c,	"footswitch-8x60.7"),
-#ifdef CONFIG_FB_MSM_HDMI_MSM_PANEL /*     */
+#ifdef CONFIG_FB_MSM_HDMI_MSM_PANEL
 	CLK_LOOKUP("mdp_clk",	mdp_tv_clk.c,		"dtv.0"),
 	CLK_LOOKUP("mdp_clk",	mdp_tv_clk.c,		"tvenc.0"),
 	CLK_LOOKUP("tv_clk",		mdp_tv_clk.c,	"footswitch-8x60.4"),
@@ -6187,7 +6153,7 @@ static struct clk_lookup msm_clocks_8930[] = {
 	CLK_LOOKUP("slave_iface_clk",	dsi1_s_p_clk.c,		"mipi_dsi.1"),
 	CLK_LOOKUP("iface_clk",		gfx3d_p_clk.c,	"kgsl-3d0.0"),
 	CLK_LOOKUP("iface_clk",		gfx3d_p_clk.c,	"footswitch-8x60.2"),
-#ifdef CONFIG_FB_MSM_HDMI_MSM_PANEL /*     */
+#ifdef CONFIG_FB_MSM_HDMI_MSM_PANEL
 	CLK_LOOKUP("master_iface_clk",	hdmi_m_p_clk.c,	"hdmi_msm.1"),
 	CLK_LOOKUP("slave_iface_clk",	hdmi_s_p_clk.c,	"hdmi_msm.1"),
 #endif
@@ -6205,13 +6171,8 @@ static struct clk_lookup msm_clocks_8930[] = {
 	CLK_LOOKUP("iface_clk",		vfe_p_clk.c,	"footswitch-8x60.8"),
 	CLK_LOOKUP("vpe_pclk",		vpe_p_clk.c,		"msm_vpe.0"),
 	CLK_LOOKUP("iface_clk",		vpe_p_clk.c,	"footswitch-8x60.9"),
-#ifdef CONFIG_FM_RADIO_MI2S_ENABLE
-	CLK_LOOKUP("bit_clk",		mi2s_bit_clk.c, "msm-dai-q6-mi2s"),
-	CLK_LOOKUP("osr_clk",		mi2s_osr_clk.c, "msm-dai-q6-mi2s"),
-#else
 	CLK_LOOKUP("bit_clk",		mi2s_bit_clk.c,		"msm-dai-q6.6"),
 	CLK_LOOKUP("osr_clk",		mi2s_osr_clk.c,		"msm-dai-q6.6"),
-#endif
 	CLK_LOOKUP("bit_clk",		codec_i2s_mic_bit_clk.c,
 			   "msm-dai-q6.1"),
 	CLK_LOOKUP("osr_clk",		codec_i2s_mic_osr_clk.c,
@@ -6642,7 +6603,7 @@ static void __init msm8960_clock_pre_init(void)
 		       sizeof(ijpeg_clk.c.fmax));
 		memcpy(mdp_clk.c.fmax, fmax_mdp_8064,
 		       sizeof(ijpeg_clk.c.fmax));
-#ifdef CONFIG_FB_MSM_HDMI_MSM_PANEL /*     */
+#ifdef CONFIG_FB_MSM_HDMI_MSM_PANEL
 		memcpy(tv_src_clk.c.fmax, fmax_tv_src_8064,
 		       sizeof(tv_src_clk.c.fmax));
 #endif

@@ -301,7 +301,6 @@ static struct socinfo_v1 dummy_socinfo = {
 	.format = 1,
 	.version = 1,
 };
-/*                                            */
 #ifdef CONFIG_LGE_PM
 u16 *poweron_st = 0;
 uint16_t power_on_status_info_get(void)
@@ -329,7 +328,6 @@ uint32_t battery_info_get(void)
 EXPORT_SYMBOL(battery_info_get);
 #endif
 #endif
-/*                                 */
 
 uint32_t socinfo_get_id(void)
 {
@@ -346,13 +344,6 @@ char *socinfo_get_build_id(void)
 {
 	return (socinfo) ? socinfo->v1.build_id : NULL;
 }
-
-/*           
-                                         
-                                    
-                                 
-                                                                  
-*/
 #if defined(CONFIG_ARCH_MSM8960) || defined(CONFIG_ARCH_MSM8930)
 #define SOCINFO_SERIAL_NUM_ADDR    0x007040B8
 
@@ -489,11 +480,6 @@ socinfo_show_build_id(struct sys_device *dev,
 
 	return snprintf(buf, PAGE_SIZE, "%-.32s\n", socinfo_get_build_id());
 }
-
-/*           
-                                                                  
-                                  
- */
 #if defined(CONFIG_ARCH_MSM8960) || defined(CONFIG_ARCH_MSM8930)
 static ssize_t
 socinfo_show_serial_number(struct sys_device *dev,
@@ -671,10 +657,6 @@ static struct sysdev_attribute socinfo_v1_files[] = {
 	_SYSDEV_ATTR(id, 0444, socinfo_show_id, NULL),
 	_SYSDEV_ATTR(version, 0444, socinfo_show_version, NULL),
 	_SYSDEV_ATTR(build_id, 0444, socinfo_show_build_id, NULL),
-/*           
-                                                                  
-                                  
- */
 #if defined(CONFIG_ARCH_MSM8960) || defined(CONFIG_ARCH_MSM8930)
 	_SYSDEV_ATTR(serial_number, 0444, socinfo_show_serial_number, NULL),
 #endif

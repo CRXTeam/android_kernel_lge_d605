@@ -342,28 +342,6 @@ static void gpio_keys_gpio_report_event(struct gpio_button_data *bdata)
 		input_event(input, type, button->code, !!state);
 	}
 	input_sync(input);
-#if defined(CONFIG_MACH_LGE)
-	if (!from_resume)
-#if defined(CONFIG_MACH_LGE_F6_TMUS)||defined(CONFIG_MACH_LGE_F6_VDF) || defined(CONFIG_MACH_LGE_F6_ORG)||defined(CONFIG_MACH_LGE_F6_OPEN) || defined(CONFIG_MACH_LGE_F6_TMO)
-	/*
-                                     
-                                      
- */
-		printk("[gpio-keys] %s KEY %s\n",
-			(button->code == KEY_VOLUMEUP) ? "Vol_UP" : ((button->code == KEY_VOLUMEDOWN) ? "Vol_DOWN" : ((button->code == KEY_QUICKMEMO) ? "Quick_Memo" : "HOME")),
-			(!!state) ? "PRESS" : "RELEASE");
-#elif defined(CONFIG_MACH_LGE_L9II_COMMON)
-		printk("[gpio-keys] %s KEY %s\n",
-			(button->code == KEY_VOLUMEUP) ? \
-			"Vol_UP" : ((button->code == KEY_VOLUMEDOWN) ? "Vol_DOWN" : "QUICK_MEMO"),\
-			(!!state) ? "PRESS" : "RELEASE");
-#else
-		printk("[gpio-keys] %s KEY %s\n",
-			(button->code == KEY_VOLUMEUP) ? \
-			"Vol_UP" : ((button->code == KEY_VOLUMEDOWN) ? "Vol_DOWN" : "HOME"),\
-			(!!state) ? "PRESS" : "RELEASE");
-#endif
-#endif
 }
 
 static void gpio_keys_gpio_work_func(struct work_struct *work)

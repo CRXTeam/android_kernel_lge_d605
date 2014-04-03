@@ -40,26 +40,22 @@
 #endif
 #include "diag_dci.h"
 
-//for antenna bar test
-#if 1
 #include <linux/moduleparam.h>
 #include <linux/syscalls.h>
 #include <linux/fcntl.h> 
 #include <linux/fs.h>
 #include <linux/uaccess.h>
 
-#endif
 #define MODE_CMD		41
 #define RESET_ID		2
 #define ALL_EQUIP_ID		100
 #define ALL_SSID		-1
 #define MAX_SSID_PER_RANGE	100
 
-//                                            
 #ifdef CONFIG_LGE_MTS
 #include "mtsk_tty.h"
-#endif /*                */
-//                                            
+#endif
+
 #ifdef CONFIG_LGE_USB_LOCK_TRF
 
 static int diag_lock_status = 0;
@@ -293,11 +289,6 @@ void __diag_smd_send_req(void)
 	int *in_busy_ptr = NULL;
 	struct diag_request *write_ptr_modem = NULL;
 
-#ifdef CONFIG_LGE_USB_DIAG_DISABLE
-	//if (diag_enable == DIAG_ENABLE)
-	{
-#endif
-
 	if (!driver->in_busy_1) {
 		buf = driver->buf_in_1;
 		write_ptr_modem = driver->write_ptr_1;
@@ -339,9 +330,6 @@ void __diag_smd_send_req(void)
 		(driver->logging_mode == MEMORY_DEVICE_MODE)) {
 		chk_logging_wakeup();
 	}
-#ifdef CONFIG_LGE_USB_DIAG_DISABLE
-	}
-#endif
 }
 
 int diag_device_write(void *buf, int proc_num, struct diag_request *write_ptr)
@@ -358,7 +346,8 @@ int diag_device_write(void *buf, int proc_num, struct diag_request *write_ptr)
 #ifdef DIAG_DEBUG
 					pr_debug("diag: ENQUEUE buf ptr"
 						   " and length is %x , %d\n",
-						   (unsigned int)(driver->buf_tbl[i].buf), driver->buf_tbl[i].length);
+						   (unsigned int)(driver->buf_
+				tbl[i].buf), driver->buf_tbl[i].length);
 #endif
 					break;
 				}
@@ -445,11 +434,9 @@ int diag_device_write(void *buf, int proc_num, struct diag_request *write_ptr)
 						driver->write_ptr_svc);
 			} else
 				err = -1;
-//                                            
 #ifdef CONFIG_LGE_MTS
 		} else if(0 == mtsk_tty_process(buf, &(write_ptr->length), proc_num)) {
 #endif
-//                                            
 		} else if (proc_num == MODEM_DATA) {
 			write_ptr->buf = buf;
 #ifdef DIAG_DEBUG
@@ -572,10 +559,6 @@ void __diag_smd_qdsp_send_req(void)
 	void *buf = NULL;
 	int *in_busy_qdsp_ptr = NULL;
 	struct diag_request *write_ptr_qdsp = NULL;
-#ifdef CONFIG_LGE_USB_DIAG_DISABLE
-	//if (diag_enable == DIAG_ENABLE)
-	{
-#endif
 
 	if (!driver->in_busy_qdsp_1) {
 		buf = driver->buf_in_qdsp_1;
@@ -618,9 +601,6 @@ void __diag_smd_qdsp_send_req(void)
 		(driver->logging_mode == MEMORY_DEVICE_MODE)) {
 		chk_logging_wakeup();
 	}
-#ifdef CONFIG_LGE_USB_DIAG_DISABLE
-	}
-#endif
 }
 
 static void diag_print_mask_table(void)
@@ -1179,13 +1159,6 @@ static int diag_process_apps_pkt(unsigned char *buf, int len)
 	int payload_length;
 	unsigned char *ptr;
 #endif
-#ifdef CONFIG_MACH_LGE_FX3_VZW // CONFIG_DIAG_HW_REV
-	unsigned smem_size;
-	void *hw_rev_smem;
-	unsigned int hw_rev = 0;
-	char *rev_str[] = {"evb1", "evb2", "rev_a", "rev_b", "rev_c", "rev_d",
-                        "rev_e", "rev_f", "rev_g", "rev_10", "rev_11", "rev_12", "reserved"};
-#endif // CONFIG_DIAG_HW_REV
 
 #ifdef CONFIG_LGE_USB_DIAG_DISABLE
     /* 0xA1(161) is portlock command */
@@ -1480,23 +1453,6 @@ static int diag_process_apps_pkt(unsigned char *buf, int len)
 		}
 #endif
 	}
-#ifdef CONFIG_MACH_LGE_FX3_VZW // CONFIG_DIAG_HW_REV
-	else if ((*buf == 0x26) && (*(buf+1) == 0x6C) && (*(buf+2) == 0x84)) {
-		hw_rev_smem = smem_get_entry(SMEM_ID_VENDOR0, &smem_size);
-		hw_rev = *(unsigned int *)hw_rev_smem;
-#if defined(CONFIG_DIAG_OVER_USB)
-		if (chk_apps_only()) {
-			driver->apps_rsp_buf[0] = 0x26;
-			driver->apps_rsp_buf[1] = 0x6C;
-			driver->apps_rsp_buf[2] = 0x84;
-			memcpy((driver->apps_rsp_buf+3), rev_str[hw_rev], strlen(rev_str[hw_rev]));
-			ENCODE_RSP_AND_SEND(132);
-			return 0;
-		} else
-			buf = temp;
-#endif
-	}
-#endif // CONFIG_DIAG_HW_REV
 	/* Check for registered clients and forward packet to apropriate proc */
 	cmd_code = (int)(*(char *)buf);
 	temp++;
@@ -1896,20 +1852,13 @@ void diag_process_hdlc(void *data, unsigned len)
       type = diag_process_apps_pkt(driver->hdlc_buf,   
                             hdlc.dest_idx - 3);   
        }   
-#endif //                                     
-	
+#endif
 	/* send error responses from APPS for Central Routing */
 	if (type == 1 && chk_apps_only()) {
 
 #ifndef CONFIG_LGE_UTS_DLL_GPS_CMD_FAIL
 		if (chk_uts_clrgps_cmd())
 		{
-			//if (driver->ch_cntl) {	 
-			//	diag_send_event_mask_update(driver->ch_cntl, 1 );	 
-			//	msleep(25);   
-			//}	
-			//type = diag_process_apps_pkt(driver->hdlc_buf, 
-			//				hdlc.dest_idx - 3);	 
 			if (type) {
 				pr_alert("diag:gps: Bad command>Retry Register>Failure!");			
 				diag_send_for_UtsClearGpsCmd(hdlc.dest_idx);
@@ -1962,10 +1911,6 @@ int diagfwd_connect(void)
 {
 	int err;
 
-//                                            
-	printk(KERN_DEBUG "$MTSUSB1\n");
-//                                            
-
 	printk(KERN_DEBUG "diag: USB connected\n");
 	err = usb_diag_alloc_req(driver->legacy_ch, N_LEGACY_WRITE,
 			N_LEGACY_READ);
@@ -2003,10 +1948,6 @@ int diagfwd_connect(void)
 
 int diagfwd_disconnect(void)
 {
-//                                            
-	printk(KERN_DEBUG "$MTSUSB0\n");
-//                                            
-
 	printk(KERN_DEBUG "diag: USB disconnected\n");
 	driver->usb_connected = 0;
 	driver->debug_flag = 1;
@@ -2140,11 +2081,9 @@ void diag_usb_legacy_notifier(void *priv, unsigned event,
 {
 	switch (event) {
 	case USB_DIAG_CONNECT:
-		//WARN(1, "[%s] USB_DIAG_CONNECT\n", __func__);
 		diagfwd_connect();
 		break;
 	case USB_DIAG_DISCONNECT:
-		//WARN(1, "[%s] USB_DIAG_DISCONNECT\n", __func__);
 		diagfwd_disconnect();
 		break;
 	case USB_DIAG_READ_DONE:
@@ -2577,8 +2516,7 @@ void diagfwd_exit(void)
 	kfree(driver->user_space_data);
 	destroy_workqueue(driver->diag_wq);
 }
-//for antenna bar test
-#if 1
+
 static int dummy_arg_on;
 
 static int antbar_write(const char *val, struct kernel_param *kp)
@@ -2622,4 +2560,3 @@ static int antbar_read(char *buf, struct kernel_param *kp)
 
 module_param_call(antbar_test, antbar_write, antbar_read, &dummy_arg_on, 0665);
 
-#endif

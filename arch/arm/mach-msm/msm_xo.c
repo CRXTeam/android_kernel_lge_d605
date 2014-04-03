@@ -161,7 +161,6 @@ static int msm_xo_show_voters(struct seq_file *m, void *v)
 	return 0;
 }
 
-/*            */
 #ifdef CONFIG_LGE_PM
 static struct  delayed_work     xo_print_work;
 static void msm_xo_show_voters_worker(struct work_struct *work)
@@ -410,7 +409,6 @@ int __init msm_xo_init(void)
 	if (ret)
 		return ret;
 	msm_xo_debugfs_init();
-/*            */
 #ifdef CONFIG_LGE_PM
 	INIT_DELAYED_WORK(&xo_print_work, msm_xo_show_voters_worker); 
 	schedule_delayed_work(&xo_print_work, round_jiffies_relative(msecs_to_jiffies(30000)));

@@ -19,11 +19,7 @@
 #include <linux/mutex.h>
 #include <linux/clk.h>
 #include <linux/clkdev.h>
-/*           
-                                            
-                                                                     
-                            
- */
+
 #ifdef CONFIG_DEBUG_FS
 #include <linux/debugfs.h>
 #include <linux/seq_file.h>
@@ -207,13 +203,7 @@ void clkdev_drop(struct clk_lookup *cl)
 }
 EXPORT_SYMBOL(clkdev_drop);
 
-
 #ifdef CONFIG_DEBUG_FS
-/*           
-                                            
-                                                                     
-                            
- */
 static int clkdev_clk_show(struct seq_file *s, void *unused)
 {
 	struct clk_lookup *p;

@@ -223,17 +223,6 @@ static void smd_tty_notify(void *priv, unsigned event)
 					msecs_to_jiffies(1000));
 		break;
 #ifdef CONFIG_LGE_USES_SMD_DS_TTY
-		/*           
-                                                        
-                                                    
-                                                 
-                                                       
-                                                       
-                                                   
-                                                       
-                                                 
-                                     
-   */
 	case SMD_EVENT_REOPEN_READY:
 		/* smd channel is closed completely */
 		spin_lock_irqsave(&info->reset_lock, flags);
@@ -320,10 +309,6 @@ static int smd_tty_open(struct tty_struct *tty, struct file *f)
 				res = 0;
 			}
 #ifdef CONFIG_LGE_USES_SMD_DS_TTY
-			/*           
-                                                      
-                                
-    */
 			if (n == DS_IDX) {
 				/* wait for open ready status in seconds */
 				pr_info("%s: checking DS modem status\n", __func__);
@@ -416,17 +401,6 @@ static void smd_tty_close(struct tty_struct *tty, struct file *f)
 		if (info->ch) {
 			smd_close(info->ch);
 #ifdef CONFIG_LGE_USES_SMD_DS_TTY
-			/*           
-                                                         
-                                                     
-                                                  
-                                                        
-                                                        
-                                                    
-                                                        
-                                                  
-                                      
-    */
 			pr_info("%s: waiting to close smd %s completely\n",
 					__func__, smd_tty[n].smd->port_name);
 			/* wait for reopen ready status in seconds */

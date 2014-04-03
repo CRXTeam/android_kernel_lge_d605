@@ -52,9 +52,6 @@
 #define SCM_IO_DISABLE_PMIC_ARBITER	1
 
 #ifdef CONFIG_LGE_HANDLE_PANIC
-/* 
-                                     
- */
 #define LGE_ERROR_HANDLE_MAGIC_NUM        0xA97F2C46
 /*
  * Need to check offset address in SBL3 (struct boot_shared_imem_cookie_type)
@@ -259,7 +256,6 @@ static void msm_restart_prepare(const char *cmd)
 	if (restart_mode == RESTART_DLOAD) {
 		set_dload_mode(1);
 #ifdef CONFIG_LGE_HANDLE_PANIC
-//                                        
         writel(0x6d63c421, restart_reason);
         goto reset;
 #endif
@@ -283,17 +279,12 @@ static void msm_restart_prepare(const char *cmd)
 				__raw_writel(0x77665502, restart_reason);
 			/* PC Sync B&R : Add restart reason */
 			} else if (!strncmp(cmd, "--bnr_recovery", 14)) {
-//                                                                             
                                 __raw_writel(0x77665503, restart_reason);
-//                                                                             
 			} else if (!strncmp(cmd, "oem-", 4)) {
 				unsigned long code;
 				code = simple_strtoul(cmd + 4, NULL, 16) & 0xff;
 				__raw_writel(0x6f656d00 | code, restart_reason);
 #ifdef CONFIG_LGE_CHARGER_TEMP_SCENARIO
-			/*                                                   
-                                     
-    */
 			} else if (!strncmp(cmd, "battery", 7)) {
 				__raw_writel(0x77665510, restart_reason);
 #endif
@@ -312,18 +303,13 @@ reset:
 			__raw_writel(0x77665500, restart_reason);
 		} else if (!strncmp(cmd, "recovery", 8)) {
 			__raw_writel(0x77665502, restart_reason);
-//                                                                             
 		} else if (!strncmp(cmd, "--bnr_recovery", 14)) {
             __raw_writel(0x77665503, restart_reason);
-//                                                                             
 		} else if (!strncmp(cmd, "oem-", 4)) {
 			unsigned long code;
 			code = simple_strtoul(cmd + 4, NULL, 16) & 0xff;
 			__raw_writel(0x6f656d00 | code, restart_reason);
 #ifdef CONFIG_LGE_CHARGER_TEMP_SCENARIO
-		/*                                                   
-                                    
-   */
 		} else if (!strncmp(cmd, "battery", 7)) {
 			__raw_writel(0x77665510, restart_reason);
 #endif

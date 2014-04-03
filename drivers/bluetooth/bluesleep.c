@@ -54,12 +54,7 @@
 
 #ifdef CONFIG_LGE_BLUESLEEP
 #define BT_PORT_NUM	0
-#define BTA_NOT_USE_ROOT_PERM
-#endif /*CONFIG_LGE_BLUESLEEP*/
-
-#ifdef BTA_NOT_USE_ROOT_PERM
-#define AID_BLUETOOTH       1002
-#endif /*BTA_NOT_USE_ROOT_PERM*/
+#endif
 
 #define BT_SLEEP_DBG
 #ifndef BT_SLEEP_DBG
@@ -175,7 +170,6 @@ void bluesleep_sleep_wakeup(void)
 		/*Activating UART */
 		hsuart_power(1);
 	}
-//WORKAROUND	
 #ifdef CONFIG_LGE_BLUESLEEP
 	else
 	{
@@ -209,7 +203,8 @@ static void bluesleep_sleep_work(struct work_struct *work)
 			/*Deactivating UART */
 			hsuart_power(0);
 		} else {
-		  	mod_timer(&tx_timer, jiffies + (TX_TIMER_INTERVAL * HZ));
+
+		  mod_timer(&tx_timer, jiffies + (TX_TIMER_INTERVAL * HZ));
 			return;
 		}
 	} else {
@@ -622,13 +617,10 @@ static int __init bluesleep_probe(struct platform_device *pdev)
 		ret = -ENODEV;
 		goto free_bt_ext_wake;
 	}
-
-//                                             
-//ADD: 0019639: [F200][BT] Support Bluetooth low power mode
 #ifdef CONFIG_LGE_BLUESLEEP
 	bsi->uport= msm_hs_get_bt_uport(BT_PORT_NUM);
-#endif/*                             */
-//                                                                                      
+#endif
+
 
 	return 0;
 
@@ -706,13 +698,6 @@ static int __init bluesleep_init(void)
 	}
 	ent->read_proc = bluepower_read_proc_btwake;
 	ent->write_proc = bluepower_write_proc_btwake;
-//                                             
-//ADD: 0019639: [F200][BT] Support Bluetooth low power mode
-#ifdef BTA_NOT_USE_ROOT_PERM
-    ent->uid = AID_BLUETOOTH;
-    ent->gid = AID_BLUETOOTH;
-#endif  //BTA_NOT_USE_ROOT_PERM
-//                                           
 
 	/* read only proc entries */
 	if (create_proc_read_entry("hostwake", 0, sleep_dir,
@@ -731,13 +716,6 @@ static int __init bluesleep_init(void)
 	}
 	ent->read_proc = bluesleep_read_proc_proto;
 	ent->write_proc = bluesleep_write_proc_proto;
-//                                             
-//ADD: 0019639: [F200][BT] Support Bluetooth low power mode
-#ifdef BTA_NOT_USE_ROOT_PERM
-    ent->uid = AID_BLUETOOTH;
-    ent->gid = AID_BLUETOOTH;
-#endif  //BTA_NOT_USE_ROOT_PERM
-//                                           
 
 	/* read only proc entries */
 	if (create_proc_read_entry("asleep", 0,

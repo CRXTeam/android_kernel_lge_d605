@@ -268,7 +268,6 @@ static int diagchar_close(struct inode *inode, struct file *file)
 	/* If the SD logging process exits, change logging to USB mode */
 	if (driver->logging_process_id == current->tgid) {
 		driver->logging_mode = USB_MODE;
-		printk("diagchar : [%s:%d] USB_DIAG_CONNECT\n", __func__, __LINE__);
 		diagfwd_connect();
 #ifdef CONFIG_DIAG_BRIDGE_CODE
 		diag_clear_hsic_tbl();
@@ -679,21 +678,18 @@ long diagchar_ioctl(struct file *filp,
 #ifdef CONFIG_DIAG_OVER_USB
 		else if (temp == USB_MODE && driver->logging_mode
 							 == NO_LOGGING_MODE) {
-			printk("diagchar : [%s] USB_DIAG_DISCONNECT\n", __func__);
 			diagfwd_disconnect();
 #ifdef CONFIG_DIAG_BRIDGE_CODE
 			diagfwd_disconnect_bridge(0);
 #endif
 		} else if (temp == NO_LOGGING_MODE && driver->logging_mode
 								== USB_MODE) {
-			printk("diagchar : [%s] USB_DIAG_CONNECT\n", __func__);
 			diagfwd_connect();
 #ifdef CONFIG_DIAG_BRIDGE_CODE
 			diagfwd_connect_bridge(0);
 #endif
 		} else if (temp == USB_MODE && driver->logging_mode
 							== MEMORY_DEVICE_MODE) {
-			printk("diagchar : [%s:%d] USB_DIAG_DISCONNECT\n", __func__, __LINE__);
 			diagfwd_disconnect();
 			driver->in_busy_1 = 0;
 			driver->in_busy_2 = 0;
@@ -725,7 +721,6 @@ long diagchar_ioctl(struct file *filp,
 #endif
 		} else if (temp == MEMORY_DEVICE_MODE &&
 				 driver->logging_mode == USB_MODE) {
-			printk("diagchar : [%s:%d] USB_DIAG_CONNECT\n", __func__, __LINE__);
 			diagfwd_connect();
 #ifdef CONFIG_DIAG_BRIDGE_CODE
 			diag_clear_hsic_tbl();
@@ -1567,7 +1562,7 @@ void write_diagstatus_event(struct work_struct *data)
 
 	return;
 }
-#endif /*                             */
+#endif
 
 static int __init diagchar_init(void)
 {

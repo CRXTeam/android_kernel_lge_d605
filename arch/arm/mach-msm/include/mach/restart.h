@@ -17,7 +17,6 @@
 #define RESTART_NORMAL 0x0
 #define RESTART_DLOAD  0x1
 
-/*            */
 #if defined(CONFIG_LGE_HANDLE_PANIC)
 #define SUB_THD_F_PWR 0x0190
 #define SUB_THD_F_SD 0x0110

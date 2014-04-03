@@ -138,10 +138,6 @@ void arm_machine_flush_console(void)
  */
 static u64 soft_restart_stack[16];
 
-/*                               
-                    
-                                                           
- */
 #ifdef CONFIG_MACH_LGE
 extern void pet_watchdog(void);
 #endif
@@ -149,8 +145,6 @@ extern void pet_watchdog(void);
 static void __soft_restart(void *addr)
 {
 	phys_reset_t phys_reset;
-
-/*            */
 #ifdef CONFIG_MACH_LGE
 	pet_watchdog();
 #endif
@@ -334,7 +328,6 @@ void machine_power_off(void)
 
 void machine_restart(char *cmd)
 {
-/*            */
 #ifdef CONFIG_MACH_LGE
 	preempt_disable();
 #endif
@@ -345,7 +338,6 @@ void machine_restart(char *cmd)
 	arm_machine_flush_console();
 
 	arm_pm_restart(reboot_mode, cmd);
-/*            */
 #ifdef CONFIG_MACH_LGE
 	preempt_enable();
 #endif
@@ -435,10 +427,6 @@ void __show_regs(struct pt_regs *regs)
 	char buf[64];
 #ifdef CONFIG_LGE_HANDLE_PANIC
 #ifdef CONFIG_CPU_CP15_MMU
-/*           
-                                                                  
-                                 
- */
 	unsigned int c1,c2;
 #endif
 	set_crash_store_enable();
@@ -468,7 +456,6 @@ void __show_regs(struct pt_regs *regs)
 		regs->ARM_r3, regs->ARM_r2,
 		regs->ARM_r1, regs->ARM_r0);
 
-/*            */
 #ifdef CONFIG_LGE_HANDLE_PANIC
 	set_crash_store_disable();
 #endif
@@ -499,10 +486,6 @@ void __show_regs(struct pt_regs *regs)
 			snprintf(buf, sizeof(buf), "  Table: %08x  DAC: %08x",
 			  	transbase, dac);
 #ifdef CONFIG_LGE_HANDLE_PANIC
-			/*           
-                                                                    
-                                   
-   */
 			c1=transbase;
 			c2=dac;
 #endif
@@ -512,10 +495,6 @@ void __show_regs(struct pt_regs *regs)
 
 		printk("Control: %08x%s\n", ctrl, buf);
 #if defined(CONFIG_CPU_CP15_MMU) && defined(CONFIG_LGE_HANDLE_PANIC)
-		/*           
-                                                                    
-                                   
-   */
 		lge_save_ctx(regs,ctrl,c1,c2);
 #endif
 	}

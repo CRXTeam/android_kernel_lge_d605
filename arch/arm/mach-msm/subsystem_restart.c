@@ -175,15 +175,11 @@ DEFINE_SINGLE_RESTART_ORDER(orders_8x60_all, _order_8x60_all);
 static const char * const _order_8x60_modems[] = {"external_modem", "modem"};
 DEFINE_SINGLE_RESTART_ORDER(orders_8x60_modems, _order_8x60_modems);
 
-//                                                                                      
 #define LGE_BSP_MODEM_CRASH_DISPLAY
-
 #ifdef LGE_BSP_MODEM_CRASH_DISPLAY
 #define MODEM_SUBSYSTEM "modem"
-#endif //                            
-//                                                   
+#endif
 
-/*                    */
 #if defined(CONFIG_MACH_LGE)
 /* MSM 8960 restart ordering info */
 static const char * const order_8960[] = {"modem", "lpass"};
@@ -565,13 +561,11 @@ static void __subsystem_restart_dev(struct subsys_device *dev)
 int subsystem_restart_dev(struct subsys_device *dev)
 {
 	const char *name;
-//                                                                                      
 #ifdef LGE_BSP_MODEM_CRASH_DISPLAY
 	int i, smem_size;
 	int size = 1000;
 	unsigned char *modem_crash_log;
 #endif
-//                                                   
 
 #if defined(CONFIG_LGE_HANDLE_PANIC)
 	u32 subsys_magic_key;;
@@ -612,7 +606,7 @@ int subsystem_restart_dev(struct subsys_device *dev)
 			modem_reboot_cnt = 1;
 	}
 #endif
-//                                                                                      
+
 #ifdef LGE_BSP_MODEM_CRASH_DISPLAY
 	if ( !strcmp(name, MODEM_SUBSYSTEM) )
 	{
@@ -649,8 +643,7 @@ int subsystem_restart_dev(struct subsys_device *dev)
 		}
 		printk("======== Modem Crash Debug Message End ========\n\n");
 	}
-#endif //                           
-//                                                   
+#endif
 
 #if defined(CONFIG_LGE_HANDLE_PANIC)
 	subsys_magic_key = lge_get_magic_for_subsystem();
@@ -880,7 +873,6 @@ static int ssr_panic_handler(struct notifier_block *this,
 static struct notifier_block panic_nb = {
 	.notifier_call  = ssr_panic_handler,
 };
-/*                    */
 #if defined(CONFIG_MACH_LGE)
 static int __init ssr_init_soc_restart_orders(void)
 {

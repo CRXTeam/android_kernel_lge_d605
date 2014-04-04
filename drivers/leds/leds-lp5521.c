@@ -94,7 +94,6 @@
 
 /* Pattern Mode */
 #define PATTERN_OFF	0
-/*            */
 #define PATTERN_BLINK_ON	-1
 
 /* Program Commands */
@@ -140,11 +139,9 @@ struct lp5521_chip {
 	struct lp5521_led	leds[LP5521_MAX_LEDS];
 	u8			num_channels;
 	u8			num_leds;
-	/*            */
 	int id_pattern_play;
 };
 
-/*            */
 struct lp5521_pattern_cmd {
 	u8 r[LP5521_PROGRAM_LENGTH];
 	u8 g[LP5521_PROGRAM_LENGTH];
@@ -265,7 +262,6 @@ static int lp5521_load_program(struct lp5521_engine *eng, const u8 *pattern)
 	struct i2c_client *client = chip->client;
 	int ret;
 	int addr;
-  /*            */
 	u8 mode = 0;
 
 	/* move current engine to direct mode and remember the state */
@@ -380,7 +376,6 @@ static void lp5521_led_brightness_work(struct work_struct *work)
 static int lp5521_detect(struct i2c_client *client)
 {
 	int ret;
-  /*            */
 	u8 buf = 0;
 
 	ret = lp5521_write(client, LP5521_REG_ENABLE, LP5521_ENABLE_DEFAULT);
@@ -646,7 +641,6 @@ static inline struct lp5521_led_pattern *lp5521_get_pattern
 	return ptn;
 }
 
-/*            */
 static void _run_led_pattern(struct lp5521_chip *chip,
 			struct lp5521_led_pattern *ptn)
 {
@@ -709,8 +703,6 @@ static ssize_t store_led_pattern(struct device *dev,
 	struct lp5521_chip *chip = i2c_get_clientdata(to_i2c_client(dev));
 	unsigned long val;
 	int ret;
-	/*            */
-	printk("LP5521: [%s] pattern id : %s", __func__, buf);
 
 	ret = strict_strtoul(buf, 10, &val);
 	if (ret)
@@ -998,6 +990,7 @@ static int __devinit lp5521_probe(struct i2c_client *client,
 				     * Exact value is not available. 10 - 20ms
 				     * appears to be enough for reset.
 				     */
+
 	/*
 	 * Make sure that the chip is reset by reading back the r channel
 	 * current reg. This is dummy read is required on some platforms -
@@ -1058,10 +1051,7 @@ static int __devinit lp5521_probe(struct i2c_client *client,
 		dev_err(&client->dev, "registering sysfs failed\n");
 		goto fail2;
 	}
-
     lp5521_run_led_pattern(1, chip);
-
-    printk("LP5521: [%s] finished!!\n", __func__);
 	return ret;
 fail2:
 	for (i = 0; i < chip->num_leds; i++) {
@@ -1081,7 +1071,6 @@ static int __devexit lp5521_remove(struct i2c_client *client)
 	struct lp5521_chip *chip = i2c_get_clientdata(client);
 	int i;
 
-    printk("LP5521: [%s]\n", __func__);
 	lp5521_run_led_pattern(PATTERN_OFF, chip);
 	lp5521_unregister_sysfs(client);
 
@@ -1147,15 +1136,6 @@ static int lp5521_resume(struct i2c_client *client)
 		usleep_range(1000, 2000); /* Keep enable down at least 1ms */
 		chip->pdata->enable(1);
 		usleep_range(1000, 2000); /* 500us abs min. */
-
-#if 0
-		lp5521_write(client, LP5521_REG_RESET, 0xff);
-		usleep_range(10000, 20000);
-		ret = lp5521_configure(client);
-		if (ret < 0) {
-			dev_err(&client->dev, "error configuring chip\n");
-		}
-#endif
 	}
 
 	return ret;

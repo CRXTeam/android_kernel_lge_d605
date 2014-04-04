@@ -46,13 +46,6 @@ config LGE_QFPROM_INTERFACE
     help
     LGE QFPROM DRIVER.
 
-config LGE_LCD_TUNING
-     bool "lcd_tuning"
-	 default n
-	 depends on MACH_LGE
-	 help
-		Support LCD tuning.
-
 config LGE_QC_LCDC_LUT
      bool "Set initial Qualcomm LCDC lut"
          default n

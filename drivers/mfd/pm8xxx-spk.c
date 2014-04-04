@@ -98,8 +98,6 @@ static int pm8xxx_spk_read(u16 addr)
 static int pm8xxx_spk_write(u16 addr, u8 val)
 {
 	int rc = 0;
-/*            */
-//	pr_debug("pm8xxx_spk_write = addr:%04x, val:%02x\n", addr, value);
 
 	mutex_lock(&the_spk_chip->spk_mutex);
 	rc = pm8xxx_writeb(the_spk_chip->dev->parent,
@@ -122,16 +120,11 @@ int pm8xxx_spk_mute(bool mute)
 	val = pm8xxx_spk_read(PM8XXX_SPK_CTL1_REG_OFF);
 	if (val < 0)
 		return val;
-	/*                                           
-                                 
- */
 	if(!mute)
 		val |= (1 << 2);
 	else
 		val &= ~(1 << 2);
-	/*              */
 	ret = pm8xxx_spk_write(PM8XXX_SPK_CTL1_REG_OFF, val);
-    printk("SPK Mute is Called - MUTE:%d\n",mute);
 	return ret;
 }
 EXPORT_SYMBOL_GPL(pm8xxx_spk_mute);
@@ -208,9 +201,7 @@ static int __devinit pm8xxx_spk_probe(struct platform_device *pdev)
 	const struct pm8xxx_spk_platform_data *pdata = pdev->dev.platform_data;
 	int ret = 0;
 	u8 value = 0;
-	/*                                           */
 	int read_value = 0;
-	/*                                         */
 
 	if (!pdata) {
 		pr_err("missing platform data\n");
@@ -270,10 +261,6 @@ static int __devinit pm8xxx_spk_probe(struct platform_device *pdev)
 	pr_debug("Setting SPK_CTL4_REG = %02x\n", value);
 	pm8xxx_spk_write(PM8XXX_SPK_CTL4_REG_OFF, value);
 
-
-	/*                                          
-                                                            
-                                                               */
 	value = 0xc8;
 	pm8xxx_spk_write(PM8XXX_SPK_CTL2_REG_OFF, value);	// 0x254
 	read_value = pm8xxx_spk_read(PM8XXX_SPK_CTL2_REG_OFF);
@@ -288,7 +275,6 @@ static int __devinit pm8xxx_spk_probe(struct platform_device *pdev)
 	pm8xxx_spk_write(PM8XXX_SPK_CTL4_REG_OFF, value);	// 0x256
 	read_value = pm8xxx_spk_read(PM8XXX_SPK_CTL4_REG_OFF);
 	pr_debug("Setting SPK_CTL4_REG(0x256) = %02x\n", read_value);
-	/*                                         */
 	
 	return pm8xxx_spk_config();
 err_handle:

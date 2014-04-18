@@ -221,7 +221,7 @@ void adreno_drawctxt_destroy(struct kgsl_device *device,
 				     CTXT_FLAGS_GMEM_SHADOW |
 				     CTXT_FLAGS_STATE_SHADOW);
 
-		drawctxt->flags |= CTXT_FLAGS_BEING_DESTROYED;
+		drawctxt->flags |= CTXT_FLAGS_BEING_DESTOYED;
 
 		adreno_drawctxt_switch(adreno_dev, NULL, 0);
 	}

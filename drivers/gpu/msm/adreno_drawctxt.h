@@ -19,35 +19,35 @@
 /* Flags */
 
 #define CTXT_FLAGS_NOT_IN_USE		0x00000000
-#define CTXT_FLAGS_IN_USE		BIT(0)
+#define CTXT_FLAGS_IN_USE		0x00000001
 
 /* state shadow memory allocated */
-#define CTXT_FLAGS_STATE_SHADOW		BIT(1)
+#define CTXT_FLAGS_STATE_SHADOW		0x00000010
 
 /* gmem shadow memory allocated */
-#define CTXT_FLAGS_GMEM_SHADOW		BIT(2)
+#define CTXT_FLAGS_GMEM_SHADOW		0x00000100
 /* gmem must be copied to shadow */
-#define CTXT_FLAGS_GMEM_SAVE		BIT(3)
+#define CTXT_FLAGS_GMEM_SAVE		0x00000200
 /* gmem can be restored from shadow */
-#define CTXT_FLAGS_GMEM_RESTORE		BIT(4)
+#define CTXT_FLAGS_GMEM_RESTORE		0x00000400
 /* preamble packed in cmdbuffer for context switching */
-#define CTXT_FLAGS_PREAMBLE		BIT(5)
+#define CTXT_FLAGS_PREAMBLE		0x00000800
 /* shader must be copied to shadow */
-#define CTXT_FLAGS_SHADER_SAVE		BIT(6)
+#define CTXT_FLAGS_SHADER_SAVE		0x00002000
 /* shader can be restored from shadow */
-#define CTXT_FLAGS_SHADER_RESTORE	BIT(7)
+#define CTXT_FLAGS_SHADER_RESTORE	0x00004000
 /* Context has caused a GPU hang */
-#define CTXT_FLAGS_GPU_HANG		BIT(8)
+#define CTXT_FLAGS_GPU_HANG		0x00008000
 /* Specifies there is no need to save GMEM */
-#define CTXT_FLAGS_NOGMEMALLOC          BIT(9)
+#define CTXT_FLAGS_NOGMEMALLOC          0x00010000
 /* Trash state for context */
-#define CTXT_FLAGS_TRASHSTATE		BIT(10)
+#define CTXT_FLAGS_TRASHSTATE		0x00020000
 /* per context timestamps enabled */
-#define CTXT_FLAGS_PER_CONTEXT_TS	BIT(11)
+#define CTXT_FLAGS_PER_CONTEXT_TS	0x00040000
 /* Context has caused a GPU hang and recovered properly */
-#define CTXT_FLAGS_GPU_HANG_RECOVERED	BIT(12)
+#define CTXT_FLAGS_GPU_HANG_RECOVERED	0x00008000
 /* Context is being destroyed so dont save it */
-#define CTXT_FLAGS_BEING_DESTROYED	BIT(13)
+#define CTXT_FLAGS_BEING_DESTOYED	0x00010000
 
 struct kgsl_device;
 struct adreno_device;

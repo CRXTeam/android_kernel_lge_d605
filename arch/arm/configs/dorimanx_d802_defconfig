@@ -1,6 +1,10 @@
 #
 # Automatically generated file; DO NOT EDIT.
+<<<<<<< HEAD
 # Linux/arm 3.4.78 Kernel Configuration
+=======
+# Linux/arm 3.4.87 Kernel Configuration
+>>>>>>> cc90eaf... patch-3.4.86-87 using patch -p1 <
 #
 CONFIG_ARM=y
 CONFIG_ARM_HAS_SG_CHAIN=y
@@ -768,8 +772,7 @@ CONFIG_NEON=y
 CONFIG_BINFMT_ELF=y
 CONFIG_ARCH_BINFMT_ELF_RANDOMIZE_PIE=y
 # CONFIG_CORE_DUMP_DEFAULT_ELF_HEADERS is not set
-CONFIG_HAVE_AOUT=y
-# CONFIG_BINFMT_AOUT is not set
+# CONFIG_HAVE_AOUT is not set
 # CONFIG_BINFMT_MISC is not set
 
 #

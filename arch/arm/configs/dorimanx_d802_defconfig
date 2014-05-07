@@ -1,10 +1,6 @@
 #
 # Automatically generated file; DO NOT EDIT.
-<<<<<<< HEAD
-# Linux/arm 3.4.78 Kernel Configuration
-=======
 # Linux/arm 3.4.87 Kernel Configuration
->>>>>>> cc90eaf... patch-3.4.86-87 using patch -p1 <
 #
 CONFIG_ARM=y
 CONFIG_ARM_HAS_SG_CHAIN=y
